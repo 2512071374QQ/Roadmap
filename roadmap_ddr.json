@@ -1,0 +1,33 @@
+{
+  "tables": [
+    {
+      "name": "Table 1 — DDR5 Roadmap",
+      "rows": [
+        {
+          "manufacturer": "Samsung",
+          "protocol": "DDR5",
+          "pkgType": "DSC",
+          "ballNum": "400",
+          "chNum": "2",
+          "dataRate": "6400",
+          "density": "8G",
+          "dies": "8Gb x1",
+          "controller": "",
+          "nandGen": "V8",
+          "dieWidth": "16",
+          "rankNum": "2",
+          "rankDensity": "8Gx2",
+          "lw": "9x13",
+          "thick": "0.8",
+          "ballHt": "0.15",
+          "fusa": "Y",
+          "gradeX": "",
+          "sample": "2025-03",
+          "cs": "2025-06",
+          "eol": ""
+        }
+      ]
+    }
+  ],
+  "showFusa": true
+}
