@@ -2097,7 +2097,22 @@
       const isNearEnd = anchorIdx >= 0 && (lastMonthIdx - anchorIdx) < 3;
       let detailIdx, detailBefore = false;
       if (isNearEnd) {
-        detailIdx = beforeAnchorIdx;
+        // FIX: if ES is less than 4 months before CS, use ES前一月 to avoid covering ES
+        if (hasEs && hasCs) {
+          const esIdx = colKeys.indexOf(row.sample);
+          const monthDiff = anchorIdx - esIdx;
+          if (monthDiff < 4) {
+            // ES < 4 months before CS: anchor at ES前一月
+            const esDate = new Date(row.sample + '-01');
+            esDate.setMonth(esDate.getMonth() - 1);
+            detailIdx = colKeys.indexOf(esDate.toISOString().substring(0, 7));
+          } else {
+            // ES >= 4 months before CS: anchor at CS前一月
+            detailIdx = beforeAnchorIdx;
+          }
+        } else {
+          detailIdx = beforeAnchorIdx;
+        }
         detailBefore = true;
       } else {
         detailIdx = afterAnchorIdx;
@@ -2402,7 +2417,22 @@
       const isNearEnd = anchorIdx >= 0 && (lastMonthIdx - anchorIdx) < 7;
       let detailIdx, detailBefore = false;
       if (isNearEnd) {
-        detailIdx = beforeAnchorIdx;
+        // FIX: if ES is less than 8 months before CS, use ES前一月 to avoid covering ES
+        if (hasEs && hasCs) {
+          const esIdx = colKeys.indexOf(row.sample);
+          const monthDiff = anchorIdx - esIdx;
+          if (monthDiff < 8) {
+            // ES < 8 months before CS: anchor at ES前一月
+            const esDate = new Date(row.sample + '-01');
+            esDate.setMonth(esDate.getMonth() - 1);
+            detailIdx = colKeys.indexOf(esDate.toISOString().substring(0, 7));
+          } else {
+            // ES >= 8 months before CS: anchor at CS前一月
+            detailIdx = beforeAnchorIdx;
+          }
+        } else {
+          detailIdx = beforeAnchorIdx;
+        }
         detailBefore = true;
       } else {
         detailIdx = afterAnchorIdx;
