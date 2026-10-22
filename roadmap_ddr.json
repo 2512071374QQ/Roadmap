@@ -46,7 +46,7 @@
           "dieWidth": "x12",
           "rankNum": "1",
           "rankDensity": "32Gb*8",
-          "fusa": "",
+          "fusa": "ASIL-D",
           "gradeX": ""
         },
         {
@@ -69,7 +69,7 @@
           "dieWidth": "x24",
           "rankNum": "1",
           "rankDensity": "16Gb*4",
-          "fusa": "",
+          "fusa": "ASIL-D",
           "gradeX": ""
         },
         {
@@ -92,7 +92,7 @@
           "dieWidth": "x12",
           "rankNum": "1",
           "rankDensity": "16Gb*8",
-          "fusa": "",
+          "fusa": "ASIL-D",
           "gradeX": ""
         },
         {
