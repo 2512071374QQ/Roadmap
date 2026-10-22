@@ -16,7 +16,7 @@
           "nandGen": "1γ",
           "dieWidth": "24",
           "rankNum": "1",
-          "rankDensity": "8Gx2",
+          "rankDensity": "32Gb*4",
           "lw": "9x13",
           "thick": "0.8",
           "ballHt": "0.15",
