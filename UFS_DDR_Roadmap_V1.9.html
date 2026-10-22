@@ -2434,12 +2434,16 @@
       html += `<td class="info-col">${row.ballHt || '—'}</td>`;
       if (ddrShowFusa) { html += `<td class="info-col">${row.fusa || '—'}</td>`; html += `<td class="info-col">${row.gradeX || '—'}</td>`; }
 
-      // DDR detail: DATA RATE / DIE PROCESS / DIE WIDTH / R:rankNum / F:fusa
+      // DDR detail: DATA RATE / DIE PROCESS / DIE WIDTH / R:rankNum
+      // RULE: if EOL has a date, do NOT show detail
+      const hasEolDate = row.eol && row.eol.length >= 7;
       const detailParts = [];
-      if (row.dataRate) detailParts.push(row.dataRate);
-      if (row.nandGen) detailParts.push(row.nandGen);
-      if (row.dieWidth) detailParts.push(row.dieWidth);
-      if (row.rankNum) detailParts.push('R:' + row.rankNum);
+      if (!hasEolDate) {
+        if (row.dataRate) detailParts.push(row.dataRate);
+        if (row.nandGen) detailParts.push(row.nandGen);
+        if (row.dieWidth) detailParts.push(row.dieWidth);
+        if (row.rankNum) detailParts.push('R:' + row.rankNum);
+      }
       const detailStr = detailParts.join(' / ');
 
       let anchorIdx = -1, afterAnchorIdx = -1, beforeAnchorIdx = -1;
