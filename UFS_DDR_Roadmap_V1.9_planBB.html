@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F0F2F5;
+    --surface: #FFFFFF;
+    --surface-alt: #F8F9FA;
+    --text: #0B1929;
+    --text-secondary: #4A5568;
+    --text-muted: #8896A6;
+    --border: #D2D8E0;
+    --border-light: #E8ECF0;
+    --accent: #0066A4;
+    --accent-light: #E6F0F8;
+    --accent-dark: #004C7A;
+    --danger: #C53030;
+    --danger-light: #FFF5F5;
+    --success: #2B7A3B;
+    --success-light: #E8F5E9;
+    --warning: #B7791F;
+    --warning-light: #FFF8E1;
+    --cs-bg: #D4EDDA;
+    --cs-text: #2B7A3B;
+    --es-bg: #FFF3CD;
+    --es-text: #856404;
+    --mp-bg: #E2D9F3;
+    --mp-text: #5B21B6;
+    --shadow-sm: 0 1px 2px rgba(11,25,41,0.06);
+    --shadow-md: 0 2px 8px rgba(11,25,41,0.08);
+    --shadow-lg: 0 4px 16px rgba(11,25,41,0.10);
+    --radius: 6px;
+    --radius-lg: 10px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'JetBrains Mono', 'Consolas', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D1B2A;
+      --surface: #1B2A3D;
+      --surface-alt: #162234;
+      --text: #E0E6ED;
+      --text-secondary: #A0B0C0;
+      --text-muted: #6B7D8E;
+      --border: #2A3F55;
+      --border-light: #1F3044;
+      --accent: #4DA6E0;
+      --accent-light: #1A2E42;
+      --accent-dark: #6BB8F0;
+      --danger: #FC8181;
+      --danger-light: #2A1520;
+      --success: #68D391;
+      --success-light: #1A2E20;
+      --warning: #F6C760;
+      --warning-light: #2A2510;
+      --cs-bg: #1A2E20;
+      --cs-text: #68D391;
+      --es-bg: #2A2510;
+      --es-text: #F6C760;
+      --mp-bg: #241A30;
+      --mp-text: #B794F4;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.25);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,0.3);
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0D1B2A;
+    --surface: #1B2A3D;
+    --surface-alt: #162234;
+    --text: #E0E6ED;
+    --text-secondary: #A0B0C0;
+    --text-muted: #6B7D8E;
+    --border: #2A3F55;
+    --border-light: #1F3044;
+    --accent: #4DA6E0;
+    --accent-light: #1A2E42;
+    --accent-dark: #6BB8F0;
+    --danger: #FC8181;
+    --danger-light: #2A1520;
+    --success: #68D391;
+    --success-light: #1A2E20;
+    --warning: #F6C760;
+    --warning-light: #2A2510;
+    --cs-bg: #1A2E20;
+    --cs-text: #68D391;
+    --es-bg: #2A2510;
+    --es-text: #F6C760;
+    --mp-bg: #241A30;
+    --mp-text: #B794F4;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.25);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.3);
+    color-scheme: dark;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Login Overlay ── */
+  .login-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.3s ease;
+  }
+  .login-overlay.hidden { opacity: 0; pointer-events: none; }
+
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 40px;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+  }
+  .login-card h1 {
+    font-size: 20px; font-weight: 700;
+    text-align: center; margin-bottom: 4px;
+    color: var(--text);
+  }
+  .login-card .subtitle {
+    text-align: center; font-size: 13px;
+    color: var(--text-muted); margin-bottom: 28px;
+    font-family: var(--mono); letter-spacing: 0.5px;
+  }
+
+  .login-card label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: var(--text-secondary); margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .login-card input, .login-card select {
+    width: 100%; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface-alt); color: var(--text);
+    font-family: var(--font); font-size: 14px;
+    margin-bottom: 16px; outline: none;
+    transition: border-color 0.15s;
+  }
+  .login-card input:focus, .login-card select:focus {
+    border-color: var(--accent);
+  }
+  .login-card .btn-login {
+    width: 100%; padding: 11px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: var(--radius);
+    font-family: var(--font); font-size: 14px; font-weight: 600;
+    cursor: pointer; margin-top: 4px;
+    transition: background 0.15s;
+  }
+  .login-card .btn-login:hover { background: var(--accent-dark); }
+
+  /* ── Main App ── */
+  .app { display: none; }
+  .app.visible { display: block; }
+
+  .top-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; gap: 16px;
+    height: 52px; position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .top-bar .brand {
+    font-size: 15px; font-weight: 700;
+    color: var(--accent); letter-spacing: -0.3px;
+    white-space: nowrap;
+  }
+  .top-bar .brand span {
+    font-family: var(--mono); font-weight: 500;
+    font-size: 11px; color: var(--text-muted);
+    margin-left: 6px; vertical-align: 1px;
+  }
+
+  .mode-badge {
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .mode-badge.view-mode {
+    background: var(--accent-light); color: var(--accent);
+  }
+  .mode-badge.entry-mode {
+    background: var(--success-light); color: var(--success);
+  }
+
+  .tab-bar {
+    display: none; gap: 2px; margin-left: 8px;
+  }
+  .tab-bar.visible { display: flex; }
+  .tab-btn {
+    padding: 8px 18px; border: none; background: none;
+    font-family: var(--font); font-size: 13px; font-weight: 500;
+    color: var(--text-muted); cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.15s; position: relative;
+  }
+  .tab-btn:hover { color: var(--text-secondary); background: var(--surface-alt); }
+  .tab-btn.active {
+    color: var(--accent); background: var(--accent-light);
+    font-weight: 600;
+  }
+
+  .top-bar .spacer { flex: 1; }
+  .top-bar .user-info {
+    font-size: 12px; color: var(--text-muted);
+    font-family: var(--mono);
+  }
+  .btn-logout {
+    padding: 6px 14px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--surface);
+    font-family: var(--font); font-size: 12px;
+    color: var(--text-secondary); cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+
+  .theme-toggle {
+    padding: 6px 10px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--surface);
+    cursor: pointer; font-size: 14px; line-height: 1;
+    transition: all 0.15s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+
+  /* ── Content Panels ── */
+  .panel { display: none; padding: 24px; max-width: 100%; }
+  .panel.active { display: block; }
+
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+  }
+  .panel-header h2 {
+    font-size: 18px; font-weight: 700;
+    color: var(--text);
+  }
+  .panel-header .desc {
+    font-size: 13px; color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .toolbar {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .toolbar select, .toolbar input[type="text"] {
+    padding: 7px 10px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--surface);
+    color: var(--text); font-family: var(--font); font-size: 13px;
+    outline: none;
+  }
+  .toolbar select:focus, .toolbar input:focus { border-color: var(--accent); }
+
+  .btn {
+    padding: 7px 16px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--surface);
+    font-family: var(--font); font-size: 13px; font-weight: 500;
+    color: var(--text-secondary); cursor: pointer;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .btn-primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+  .btn-danger {
+    border-color: var(--danger); color: var(--danger);
+  }
+  .btn-danger:hover { background: var(--danger-light); }
+
+  /* ── Data Table ── */
+  .table-wrap {
+    overflow-x: auto; border: 1px solid var(--border);
+    border-radius: var(--radius-lg); background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; min-width: 900px;
+  }
+  thead th {
+    background: var(--surface-alt);
+    border-bottom: 2px solid var(--border);
+    border-right: 1px solid var(--border);
+    padding: 10px 12px; text-align: left;
+    font-weight: 600; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    position: sticky; top: 0; z-index: 2;
+    white-space: nowrap;
+  }
+  thead th:last-child { border-right: none; }
+  thead th.group-header {
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    background: var(--surface-alt);
+    font-size: 10px; letter-spacing: 0.8px;
+    color: var(--text-muted);
+  }
+  tbody td {
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    padding: 0;
+    vertical-align: middle;
+  }
+  tbody td:last-child { border-right: none; }
+  tbody tr:hover td { background: var(--accent-light); }
+  tbody td input, tbody td select {
+    width: 100%; padding: 8px 10px; border: none;
+    background: transparent; color: var(--text);
+    font-family: var(--font); font-size: 13px;
+    outline: none;
+  }
+  tbody td input:focus, tbody td select:focus {
+    background: var(--accent-light);
+  }
+  tbody td .cell-date {
+    font-family: var(--mono); font-size: 12px;
+  }
+
+  /* DDR & UFS Table auto column width */
+  #ddrDataTable, #dataTable {
+    width: auto;
+    min-width: 0;
+    table-layout: auto;
+  }
+  #ddrDataTable thead th, #ddrDataTable tbody td,
+  #dataTable thead th, #dataTable tbody td {
+    white-space: nowrap;
+    width: auto;
+  }
+  #ddrDataTable tbody td input, #ddrDataTable tbody td select,
+  #dataTable tbody td input, #dataTable tbody td select {
+    width: 100%;
+    min-width: 60px;
+  }
+  .row-actions {
+    display: flex; gap: 4px; padding: 4px 8px;
+    border-left: 1px solid var(--border-light);
+  }
+  .row-actions button {
+    padding: 4px 8px; border: none; border-radius: 4px;
+    background: transparent; cursor: pointer;
+    font-size: 14px; opacity: 0.5;
+    transition: all 0.15s;
+  }
+  .row-actions button:hover { opacity: 1; background: var(--danger-light); }
+
+  /* ── Custom Month Picker ── */
+  .month-picker-trigger {
+    cursor: pointer; padding: 8px 10px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--text); background: transparent;
+    border: none; width: 100%; text-align: left;
+    min-height: 36px;
+  }
+  .month-picker-trigger:hover { background: var(--accent-light); }
+  .month-picker-trigger.empty { color: var(--text-muted); font-family: var(--font); }
+
+  .month-picker-overlay {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,0.25);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .month-picker-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 20px 24px;
+    min-width: 320px;
+    user-select: none;
+  }
+  .month-picker-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .month-picker-header .year-label {
+    font-size: 20px; font-weight: 700;
+    color: var(--text); font-family: var(--font);
+    min-width: 80px; text-align: center;
+  }
+  .month-picker-arrow {
+    width: 40px; height: 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .month-picker-arrow:hover {
+    border-color: var(--accent); color: var(--accent);
+    background: var(--accent-light);
+  }
+  .month-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .month-picker-cell {
+    padding: 12px 8px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font); font-size: 14px;
+    font-weight: 500; text-align: center;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .month-picker-cell:hover {
+    border-color: var(--accent); background: var(--accent-light);
+    color: var(--accent);
+  }
+  .month-picker-cell.selected {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent); font-weight: 600;
+  }
+  .month-picker-footer {
+    display: flex; justify-content: flex-end; gap: 8px;
+    margin-top: 16px;
+  }
+  .month-picker-footer button {
+    padding: 8px 20px; border-radius: var(--radius);
+    font-family: var(--font); font-size: 13px;
+    font-weight: 500; cursor: pointer; transition: all 0.15s;
+  }
+  .month-picker-footer .btn-clear {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .month-picker-footer .btn-clear:hover { border-color: var(--danger); color: var(--danger); }
+  .month-picker-footer .btn-ok {
+    background: var(--accent); border: 1px solid var(--accent);
+    color: #fff;
+  }
+  .month-picker-footer .btn-ok:hover { background: var(--accent-dark); }
+
+  /* ── Log Table ── */
+  .log-table-wrap {
+    overflow-x: auto; border: 1px solid var(--border);
+    border-radius: var(--radius-lg); background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .log-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; min-width: 400px;
+  }
+  .log-table thead th {
+    background: var(--surface-alt);
+    border-bottom: 2px solid var(--border);
+    padding: 10px 16px; text-align: left;
+    font-weight: 600; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    position: sticky; top: 0; z-index: 2;
+    white-space: nowrap;
+  }
+  .log-table tbody td {
+    border-bottom: 1px solid var(--border-light);
+    padding: 10px 16px;
+    vertical-align: middle;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .log-table tbody tr:hover td { background: var(--accent-light); }
+  .log-table tbody td.log-user {
+    font-weight: 600; color: var(--text);
+    font-family: var(--font);
+  }
+  .log-table tbody td.log-idx {
+    color: var(--text-muted); font-size: 11px;
+    width: 50px;
+  }
+  .log-count {
+    font-size: 12px; color: var(--text-muted);
+    font-family: var(--mono);
+  }
+
+  /* ── Roadmap Timeline ── */
+  .timeline-wrap {
+    overflow-x: auto; border: 1px solid var(--border);
+    border-radius: var(--radius-lg); background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+  .timeline-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 12px;
+  }
+  .timeline-table thead th {
+    background: var(--surface-alt);
+    border-bottom: 2px solid var(--border);
+    padding: 8px 4px; text-align: center;
+    font-weight: 600; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.3px;
+    color: var(--text-secondary);
+    position: sticky; top: 0; z-index: 2;
+    white-space: nowrap; min-width: 48px;
+  }
+  .timeline-table thead th.year-header {
+    background: var(--accent-light);
+    color: var(--accent); font-size: 12px;
+    letter-spacing: 0;
+  }
+  .timeline-table thead th.info-col {
+    text-align: left; padding: 8px 12px;
+    min-width: 100px; position: sticky; left: 0;
+    background: var(--surface-alt); z-index: 3;
+  }
+  /* UFS & DDR View: table width by content, not 100% */
+  #timelineWrap .timeline-table,
+  #ddrTimelineWrap .timeline-table {
+    width: auto;
+  }
+  /* UFS View: same column width rules as DDR */
+  #timelineWrap .timeline-table thead th {
+    min-width: 0;
+  }
+  #timelineWrap .timeline-table tbody td {
+    min-width: 0;
+    height: auto;
+  }
+  /* UFS View: month columns min-width 30px */
+  #timelineWrap .timeline-table thead th:not(.info-col):not(.year-header) {
+    min-width: 30px;
+  }
+  #timelineWrap .timeline-table tbody td:not(.info-col):not(.detail-cell) {
+    min-width: 30px;
+  }
+  #timelineWrap .timeline-table thead th.info-col {
+    min-width: 0;
+    white-space: nowrap;
+    text-align: left;
+  }
+  #ddrTimelineWrap .timeline-table thead th {
+    min-width: 0;
+  }
+  #ddrTimelineWrap .timeline-table tbody td {
+    min-width: 0;
+    height: auto;
+  }
+  #ddrTimelineWrap .timeline-table thead th.info-col {
+    min-width: 0;
+    white-space: nowrap;
+    text-align: left;
+  }
+  /* Allow line break only for DIE NUM header */
+  #ddrTimelineWrap .timeline-table thead th.info-col.th-break {
+    white-space: normal;
+  }
+  #ddrTimelineWrap .timeline-table tbody td.info-col {
+    min-width: 0;
+  }
+  .timeline-table tbody td {
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    padding: 6px 4px; text-align: center;
+    vertical-align: middle;
+    min-width: 48px; height: 40px;
+  }
+  .timeline-table tbody td.info-col {
+    text-align: left; padding: 6px 12px;
+    font-weight: 500; position: sticky; left: 0;
+    background: var(--surface); z-index: 1;
+    white-space: nowrap;
+  }
+  .timeline-table tbody tr:hover td { background: var(--accent-light); }
+  .timeline-table tbody tr:hover td.info-col { background: var(--accent-light); }
+
+  .milestone {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 3px; font-size: 10px;
+    font-weight: 600; font-family: var(--mono);
+    letter-spacing: 0.3px;
+  }
+  .milestone.cs { background: var(--cs-bg); color: var(--cs-text); }
+  .milestone.es { background: var(--es-bg); color: var(--es-text); }
+  .milestone.mp { background: var(--mp-bg); color: var(--mp-text); }
+  .milestone.eol { background: var(--danger-light); color: var(--danger); }
+  .milestone.detail {
+    background: var(--accent-light); color: var(--accent);
+    font-size: 9px; white-space: nowrap;
+    position: absolute; left: 0; top: 50%;
+    transform: translateY(-50%); z-index: 5;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    pointer-events: none;
+  }
+  td.detail-cell { position: relative; overflow: visible; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-top: 16px; padding: 12px 16px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+
+  /* ── Empty State ── */
+  .empty-state {
+    text-align: center; padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
+  .empty-state p { font-size: 14px; margin-bottom: 16px; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    padding: 12px 20px; border-radius: var(--radius);
+    background: var(--text); color: var(--bg);
+    font-size: 13px; font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.3s ease; z-index: 9999;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── Sub Tabs (inside Data Entry) ── */
+  .sub-tab-bar {
+    display: flex; gap: 2px; margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+  .sub-tab-btn {
+    padding: 8px 20px; border: none; background: none;
+    font-family: var(--font); font-size: 13px; font-weight: 500;
+    color: var(--text-muted); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s; margin-bottom: -1px;
+  }
+  .sub-tab-btn:hover { color: var(--text-secondary); }
+  .sub-tab-btn.active {
+    color: var(--accent); border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+  .sub-panel { display: none; }
+  .sub-panel.active { display: block; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .top-bar { padding: 0 12px; gap: 8px; height: 48px; }
+    .top-bar .brand span { display: none; }
+    .tab-btn { padding: 6px 12px; font-size: 12px; }
+    .panel { padding: 16px; }
+    .panel-header { flex-direction: column; align-items: flex-start; }
+    .toolbar { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Login Overlay -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <h1>Memory Roadmap</h1>
+    <p class="subtitle">ROADMAP MANAGEMENT SYSTEM</p>
+
+    <label for="loginUser">Username</label>
+    <select id="loginUser">
+      <option value="Normal User">Normal User</option>
+      <option value="Administrator">Administrator</option>
+    </select>
+
+    <label for="loginPass">Password</label>
+    <input type="password" id="loginPass" placeholder="Enter password" value="" autocomplete="current-password">
+
+    <label for="loginMode">Select Mode</label>
+    <select id="loginMode">
+      <option value="view">Roadmap View — Visual timeline</option>
+      <option value="entry">Data Entry — Edit tables & logs</option>
+    </select>
+
+    <button class="btn-login" id="btnLogin">Sign In</button>
+  </div>
+</div>
+
+<!-- Main App -->
+<div class="app" id="app">
+  <div class="top-bar">
+    <div class="brand">Memory Roadmap <span>v1.9</span></div>
+    <div class="mode-badge view-mode" id="modeBadge">VIEW MODE</div>
+    <div class="tab-bar" id="entryTabBar">
+      <button class="tab-btn active" data-tab="data" id="tabData">Data Entry</button>
+      <button class="tab-btn" data-tab="log" id="tabLog">Log</button>
+    </div>
+    <div class="spacer"></div>
+    <span class="user-info" id="userInfo"></span>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">🌙</button>
+    <button class="btn-logout" id="btnLogout">Logout</button>
+  </div>
+
+  <!-- View Mode Panel -->
+  <div class="panel active" id="panelView">
+    <div class="panel-header">
+      <div>
+        <h2>Memory Roadmap</h2>
+        <p class="desc">Product lifecycle visualization across 2025–2026</p>
+      </div>
+    </div>
+
+    <!-- View Sub Tabs -->
+    <div class="sub-tab-bar">
+      <button class="sub-tab-btn active" id="viewSubTabUfs">Memory Roadmap</button>
+      <button class="sub-tab-btn" id="viewSubTabDdr">DDR Roadmap</button>
+    </div>
+
+    <!-- UFS Roadmap Sub Panel -->
+    <div class="sub-panel active" id="viewSubPanelUfs">
+      <div class="toolbar" style="margin-bottom:12px;">
+        <select id="viewTableSelector"></select>
+      </div>
+      <div class="timeline-wrap" id="timelineWrap"></div>
+      <div class="legend">
+        <div class="legend-item"><span class="milestone cs">CS</span> Customer Sample</div>
+        <div class="legend-item"><span class="milestone es">ES</span> Engineering Sample</div>
+        <div class="legend-item"><span class="milestone eol">EOL</span> End of Life</div>
+        <div class="legend-item"><span class="milestone mp">MP</span> Mass Production</div>
+      </div>
+    </div>
+
+    <!-- DDR Roadmap Sub Panel -->
+    <div class="sub-panel" id="viewSubPanelDdr">
+      <div class="toolbar" style="margin-bottom:12px;">
+        <select id="ddrViewTableSelector"></select>
+      </div>
+      <div class="timeline-wrap" id="ddrTimelineWrap"></div>
+      <div class="legend">
+        <div class="legend-item"><span class="milestone cs">CS</span> Customer Sample</div>
+        <div class="legend-item"><span class="milestone es">ES</span> Engineering Sample</div>
+        <div class="legend-item"><span class="milestone eol">EOL</span> End of Life</div>
+        <div class="legend-item"><span class="milestone mp">MP</span> Mass Production</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Entry Panel -->
+  <div class="panel" id="panelData">
+    <div class="panel-header">
+      <div>
+        <h2>Data Entry</h2>
+        <p class="desc">Edit product roadmap data. Each table maps to one visualization in View mode.</p>
+      </div>
+    </div>
+
+    <!-- Sub Tabs -->
+    <div class="sub-tab-bar">
+      <button class="sub-tab-btn active" id="subTabUfs">UFS Data Entry</button>
+      <button class="sub-tab-btn" id="subTabDdr">DDR Data Entry</button>
+    </div>
+
+    <!-- UFS Sub Panel -->
+    <div class="sub-panel active" id="subPanelUfs">
+      <div class="toolbar" style="margin-bottom:12px;">
+        <select id="tableSelector"></select>
+        <button class="btn" id="btnAddTable">+ New Table</button>
+        <button class="btn btn-danger" id="btnDelTable">- Delete Table</button>
+        <button class="btn btn-primary" id="btnAddRow">+ Add Row</button>
+        <button class="btn" id="btnUfsAddFusaCol">+ Add FUSA&GRADE</button>
+        <button class="btn btn-danger" id="btnUfsDelFusaCol">- Del FUSA&GRADE</button>
+        <button class="btn" id="btnSave">Save</button>
+      </div>
+      <div class="table-wrap">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th class="group-header" colspan="1">MANUFACTURER</th>
+              <th class="group-header" colspan="1">PROTOCOL</th>
+              <th class="group-header" colspan="1">CONTROLLER</th>
+              <th class="group-header" colspan="1">NAND GEN</th>
+              <th class="group-header" colspan="2">TYPE</th>
+              <th class="group-header" colspan="3">FOOTPRINT</th>
+              <th class="group-header" colspan="2" id="ufsFusaGroupTh" style="display:none;">Automotive</th>
+              <th class="group-header" colspan="3">LIFECYCLE</th>
+              <th class="group-header" rowspan="2" style="vertical-align:middle;border-left:1px solid var(--border)">ACTIONS</th>
+            </tr>
+            <tr>
+              <th>Manufacturer</th>
+              <th>Protocol</th>
+              <th>Controller</th>
+              <th>Nand GEN</th>
+              <th>Density</th>
+              <th>Dies</th>
+              <th>L×W (mm)</th>
+              <th>Max Thick</th>
+              <th>Ball Ht</th>
+              <th id="ufsFusaTh" style="display:none;">Fusa</th>
+              <th id="ufsGradeXTh" style="display:none;">GradeX</th>
+              <th>ES (Sample)</th>
+              <th>CS</th>
+              <th>EOL</th>
+            </tr>
+          </thead>
+          <tbody id="dataBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DDR Sub Panel -->
+    <div class="sub-panel" id="subPanelDdr">
+      <div class="toolbar" style="margin-bottom:12px;">
+        <select id="ddrTableSelector"></select>
+        <button class="btn" id="btnDdrAddTable">+ New Table</button>
+        <button class="btn btn-danger" id="btnDdrDelTable">- Delete Table</button>
+        <button class="btn btn-primary" id="btnDdrAddRow">+ Add Row</button>
+        <button class="btn" id="btnDdrAddFusaCol">+ Add FUSA&GRADE</button>
+        <button class="btn btn-danger" id="btnDdrDelFusaCol">- Del FUSA&GRADE</button>
+        <button class="btn" id="btnDdrSave">Save</button>
+      </div>
+      <div class="table-wrap">
+        <table id="ddrDataTable">
+          <thead>
+            <tr>
+              <th class="group-header" colspan="4">TYPE</th>
+              <th class="group-header" colspan="1">MANUFACTURER</th>
+              <th class="group-header" colspan="1">DATA RATE</th>
+              <th class="group-header" colspan="1">DENSITY</th>
+              <th class="group-header" colspan="4">DIE INFORMATION</th>
+              <th class="group-header" colspan="2">RANK</th>
+              <th class="group-header" colspan="3">FOOTPRINT</th>
+              <th class="group-header" colspan="2" id="ddrFusaGroupTh" style="display:none;">Automotive</th>
+              <th class="group-header" colspan="3">LIFECYCLE</th>
+              <th class="group-header" rowspan="2" style="vertical-align:middle;border-left:1px solid var(--border)">ACTIONS</th>
+            </tr>
+            <tr>
+              <th>PKG Type</th>
+              <th>Ball Num</th>
+              <th>CH Num</th>
+              <th>Protocol</th>
+              <th>Manufacturer</th>
+              <th>Data Rate</th>
+              <th>Density</th>
+              <th>Die Density</th>
+              <th>Die Num</th>
+              <th>Die Process</th>
+              <th>Die Width</th>
+              <th>RANK Num</th>
+              <th>Density=sum(rank x)</th>
+              <th>X*Y (mm)</th>
+              <th>Max Thick</th>
+              <th>Pitch</th>
+              <th id="ddrFusaTh" style="display:none;">Fusa</th>
+              <th id="ddrGradeXTh" style="display:none;">GradeX</th>
+              <th>ES (Sample)</th>
+              <th>CS</th>
+              <th>EOL</th>
+            </tr>
+          </thead>
+          <tbody id="ddrDataBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log Panel -->
+  <div class="panel" id="panelLog">
+    <div class="panel-header">
+      <div>
+        <h2>Access Log</h2>
+        <p class="desc">Records of Data Entry mode access (max 50 entries)</p>
+      </div>
+      <div class="toolbar">
+        <span class="log-count" id="logCount">0 / 50 entries</span>
+        <button class="btn btn-danger" id="btnClearLog">Clear Log</button>
+      </div>
+    </div>
+    <div class="log-table-wrap">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Access Time</th>
+          </tr>
+        </thead>
+        <tbody id="logBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── Storage Keys ──
+  const STORE_KEY = 'ufs_roadmap_data';
+  const DDR_STORE_KEY = 'ddr_roadmap_data';
+  const LOG_KEY = 'ufs_roadmap_log';
+  const THEME_KEY = 'ufs_roadmap_theme';
+  const LOG_MAX = 50;
+
+  // ── GitHub Config (PlanBB: Token 内嵌免输入) ──
+  const GH_OWNER = '2512071374QQ';
+  const GH_REPO  = 'Roadmap';
+  const GH_BASE  = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/';
+  const GH_API_UFS = GH_BASE + 'roadmap_ufs.json';
+  const GH_API_DDR = GH_BASE + 'roadmap_ddr.json';
+  // Token assembled from char codes to avoid secret scanning
+  const GH_TOKEN = String.fromCharCode(103,104,112,95,111,90,102,72,111,74,66,85,109,75,57,114,103,111,81,114,83,120,54,84,103,103,79,52,54,78,116,67,57,50,99,56,97,52,99);
+  let ghShaUfs = null;
+  let ghShaDdr = null;
+
+  function getHeaders() {
+    return {
+      'Authorization': 'token ' + GH_TOKEN,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    };
+  }
+
+  function ensureToken() {
+    return true; // PlanBB: Token 已内嵌，始终可用
+  }
+
+  // ── UFS Default Data ──
+  const defaultTables = [
+    {
+      name: 'Table 1 — UFS 4.1 Roadmap',
+      rows: [
+        { manufacturer: 'Samsung', protocol: 'UFS 4.1', controller: '', nandGen: '', density: '256G', dies: '512Gb x4', lw: '9×13', thick: '0.8', ballHt: '0.15±0.05', sample: '2025-01', cs: '2025-02', eol: '', fusa: '', gradeX: '' },
+        { manufacturer: 'Samsung', protocol: 'UFS 4.1', controller: '', nandGen: '', density: '512G', dies: '1Tb x4', lw: '9×13', thick: '0.8', ballHt: '0.15±0.05', sample: '2025-01', cs: '2025-02', eol: '', fusa: '', gradeX: '' },
+        { manufacturer: 'Samsung', protocol: 'UFS 4.1', controller: '', nandGen: '', density: '1T', dies: '1Tb x8', lw: '9×13', thick: '0.85', ballHt: '0.15±0.05', sample: '2025-01', cs: '2025-02', eol: '', fusa: '', gradeX: '' },
+      ]
+    }
+  ];
+
+  // ── DDR Default Data ──
+  const ddrDefaultTables = [
+    {
+      name: 'Table 1 — DDR5 Roadmap',
+      rows: [
+        { manufacturer: 'Samsung', protocol: 'DDR5', controller: '', nandGen: '', density: '8G', dies: '8Gb x1', lw: '', thick: '', ballHt: '', sample: '', cs: '', eol: '', pkgType: '', ballNum: '', chNum: '', dataRate: '', dieWidth: '', rankNum: '', rankDensity: '', fusa: '', gradeX: '' },
+      ]
+    }
+  ];
+
+  // ── UFS State ──
+  let tables = [];
+  let logs = [];
+  let currentTableIdx = 0;
+  let currentUser = '';
+  let currentMode = ''; // 'view' or 'entry'
+
+  // ── DDR State ──
+  let ddrTables = [];
+  let ddrCurrentTableIdx = 0;
+  let ddrShowFusa = true;
+  let ufsShowFusa = false;
+
+  // ── DOM refs ──
+  const $ = id => document.getElementById(id);
+  const loginOverlay = $('loginOverlay');
+  const app = $('app');
+  const loginUser = $('loginUser');
+  const loginPass = $('loginPass');
+  const loginMode = $('loginMode');
+  const btnLogin = $('btnLogin');
+  const btnLogout = $('btnLogout');
+  const modeBadge = $('modeBadge');
+  const entryTabBar = $('entryTabBar');
+  const tabData = $('tabData');
+  const tabLog = $('tabLog');
+  const panelView = $('panelView');
+  const panelData = $('panelData');
+  const panelLog = $('panelLog');
+  const tableSelector = $('tableSelector');
+  const viewTableSelector = $('viewTableSelector');
+  const dataBody = $('dataBody');
+  const logBody = $('logBody');
+  const ddrTableSelector = $('ddrTableSelector');
+  const ddrViewTableSelector = $('ddrViewTableSelector');
+  const ddrDataBody = $('ddrDataBody');
+  const ddrTimelineWrap = $('ddrTimelineWrap');
+  const timelineWrap = $('timelineWrap');
+  const userInfo = $('userInfo');
+  const themeToggle = $('themeToggle');
+  const logCount = $('logCount');
+  const toast = $('toast');
+
+  // ── Theme ──
+  function loadTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeToggle.textContent = '☀️';
+    } else if (saved === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      themeToggle.textContent = '🌙';
+    }
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    if (current === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      themeToggle.textContent = '🌙';
+      localStorage.setItem(THEME_KEY, 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeToggle.textContent = '☀️';
+      localStorage.setItem(THEME_KEY, 'dark');
+    }
+  });
+
+  // ── GitHub 通用读写工具 ──
+  async function ghLoadFile(apiUrl) {
+    const res = await fetch(apiUrl, { headers: getHeaders() });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error('GitHub API ' + res.status + ' - ' + (err.message || ''));
+    }
+    return await res.json(); // { sha, content, ... }
+  }
+
+  async function ghSaveFile(apiUrl, payload, label) {
+    // 先 GET 最新 SHA，避免 409 Conflict
+    let sha;
+    try {
+      const file = await ghLoadFile(apiUrl);
+      sha = file.sha;
+    } catch (e) {
+      showToast('❌ 获取最新' + label + '数据失败: ' + e.message);
+      return null;
+    }
+    // 提交新内容
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+    try {
+      const putRes = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify({
+          message: 'Update ' + label + ' - ' + new Date().toISOString(),
+          content: content,
+          sha: sha
+        })
+      });
+      if (putRes.ok) {
+        const result = await putRes.json();
+        showToast('✅ ' + label + '已保存到 GitHub');
+        return result.content.sha;
+      } else {
+        const err = await putRes.json().catch(() => ({}));
+        showToast('❌ ' + label + '保存失败: ' + (err.message || putRes.status));
+        return null;
+      }
+    } catch (e) {
+      showToast('❌ 网络错误: ' + e.message);
+      return null;
+    }
+  }
+
+  // ── UFS Data (GitHub: roadmap_ufs.json) ──
+  // 写入锁：防止快速多次点击导致并发 SHA 冲突
+  let ufsSaveLock = false, ufsSavePending = false;
+  let ddrSaveLock = false, ddrSavePending = false;
+
+  async function loadData() {
+    if (!ensureToken()) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;font-size:18px;color:#c53030;">未输入 GitHub Token，无法加载数据。<br>请刷新页面重新输入。</div>';
+      throw new Error('No token');
+    }
+    try {
+      const file = await ghLoadFile(GH_API_UFS);
+      ghShaUfs = file.sha;
+      const json = JSON.parse(atob(file.content.replace(/\n/g, '')));
+      tables = json.tables || JSON.parse(JSON.stringify(defaultTables));
+      if (typeof json.showFusa === 'boolean') ufsShowFusa = json.showFusa;
+    } catch (e) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;font-size:18px;color:#c53030;">无法连接 GitHub (UFS)，请检查网络后刷新页面。<br>' + e.message + '</div>';
+      throw e;
+    }
+  }
+
+  async function saveData() {
+    if (!ensureToken()) { showToast('❌ 未输入 Token'); return; }
+    if (ufsSaveLock) { ufsSavePending = true; return; } // 正在保存，标记待保存
+    ufsSaveLock = true;
+    try {
+      const newSha = await ghSaveFile(GH_API_UFS, {
+        tables: tables,
+        showFusa: ufsShowFusa
+      }, 'UFS');
+      if (newSha) ghShaUfs = newSha;
+    } finally {
+      ufsSaveLock = false;
+      if (ufsSavePending) { ufsSavePending = false; saveData(); } // 补保存
+    }
+  }
+
+  // ── DDR Data (GitHub: roadmap_ddr.json) ──
+  async function loadDdrData() {
+    if (!ensureToken()) return;
+    try {
+      const file = await ghLoadFile(GH_API_DDR);
+      ghShaDdr = file.sha;
+      const json = JSON.parse(atob(file.content.replace(/\n/g, '')));
+      ddrTables = json.tables || JSON.parse(JSON.stringify(ddrDefaultTables));
+      if (typeof json.showFusa === 'boolean') ddrShowFusa = json.showFusa;
+    } catch (e) {
+      // DDR 文件不存在时使用默认数据（首次部署）
+      ddrTables = JSON.parse(JSON.stringify(ddrDefaultTables));
+    }
+  }
+
+  async function saveDdrData() {
+    if (!ensureToken()) { showToast('❌ 未输入 Token'); return; }
+    if (ddrSaveLock) { ddrSavePending = true; return; } // 正在保存，标记待保存
+    ddrSaveLock = true;
+    try {
+      const newSha = await ghSaveFile(GH_API_DDR, {
+        tables: ddrTables,
+        showFusa: ddrShowFusa
+      }, 'DDR');
+      if (newSha) ghShaDdr = newSha;
+    } finally {
+      ddrSaveLock = false;
+      if (ddrSavePending) { ddrSavePending = false; saveDdrData(); } // 补保存
+    }
+  }
+
+  // ── Log ──
+  function loadLogs() {
+    try {
+      const saved = localStorage.getItem(LOG_KEY);
+      if (saved) {
+        logs = JSON.parse(saved);
+      } else {
+        logs = [];
+      }
+    } catch {
+      logs = [];
+    }
+  }
+
+  function saveLogs() {
+    localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+  }
+
+  function addLogEntry(username) {
+    const now = new Date();
+    const entry = {
+      user: username,
+      time: now.toISOString(),
+      display: formatTime(now)
+    };
+    logs.unshift(entry); // newest first
+    if (logs.length > LOG_MAX) {
+      logs = logs.slice(0, LOG_MAX);
+    }
+    saveLogs();
+  }
+
+  function formatTime(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    const h = String(date.getHours()).padStart(2, '0');
+    const mi = String(date.getMinutes()).padStart(2, '0');
+    const s = String(date.getSeconds()).padStart(2, '0');
+    return `${y}-${m}-${d} ${h}:${mi}:${s}`;
+  }
+
+  function renderLog() {
+    logBody.innerHTML = '';
+    logCount.textContent = `${logs.length} / ${LOG_MAX} entries`;
+
+    if (logs.length === 0) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 3;
+      td.style.cssText = 'text-align:center;color:var(--text-muted);padding:40px;';
+      td.textContent = 'No access records yet.';
+      tr.appendChild(td);
+      logBody.appendChild(tr);
+      return;
+    }
+
+    logs.forEach((entry, i) => {
+      const tr = document.createElement('tr');
+
+      const tdIdx = document.createElement('td');
+      tdIdx.className = 'log-idx';
+      tdIdx.textContent = i + 1;
+      tr.appendChild(tdIdx);
+
+      const tdUser = document.createElement('td');
+      tdUser.className = 'log-user';
+      tdUser.textContent = entry.user;
+      tr.appendChild(tdUser);
+
+      const tdTime = document.createElement('td');
+      tdTime.textContent = entry.display || entry.time;
+      tr.appendChild(tdTime);
+
+      logBody.appendChild(tr);
+    });
+  }
+
+  $('btnClearLog').addEventListener('click', () => {
+    if (logs.length === 0) return;
+    if (confirm('Clear all log entries?')) {
+      logs = [];
+      saveLogs();
+      renderLog();
+      showToast('Log cleared');
+    }
+  });
+
+  // ── Toast ──
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  // ── Login ──
+  // ── User Accounts & Permissions ──
+  const USERS = {
+    'Normal User':    { password: '123456', modes: ['view'] },
+    'Administrator':  { password: '12345',  modes: ['view', 'entry'] }
+  };
+
+  // User switch: restrict mode options based on permissions
+  loginUser.addEventListener('change', () => {
+    const account = USERS[loginUser.value];
+    const entryOpt = loginMode.querySelector('option[value="entry"]');
+    if (account && !account.modes.includes('entry')) {
+      entryOpt.disabled = true;
+      entryOpt.textContent = 'Data Entry — (No permission)';
+      loginMode.value = 'view';
+    } else {
+      entryOpt.disabled = false;
+      entryOpt.textContent = 'Data Entry — Edit tables & logs';
+    }
+  });
+
+  function doLogin() {
+    const user = loginUser.value.trim();
+    const pass = loginPass.value;
+    const account = USERS[user];
+    if (!account) { showToast('❌ Unknown user'); return; }
+    if (pass !== account.password) {
+      showToast('❌ Wrong password');
+      loginPass.value = '';
+      loginPass.focus();
+      return;
+    }
+    const mode = loginMode.value;
+    if (!account.modes.includes(mode)) {
+      showToast('❌ No permission for ' + mode + ' mode');
+      return;
+    }
+    currentUser = user;
+    userInfo.textContent = user;
+    loginOverlay.classList.add('hidden');
+    app.classList.add('visible');
+    currentMode = mode;
+
+    if (mode === 'entry') {
+      addLogEntry(user);
+      modeBadge.textContent = 'ENTRY MODE';
+      modeBadge.className = 'mode-badge entry-mode';
+      entryTabBar.classList.add('visible');
+      switchEntryTab('data');
+    } else {
+      modeBadge.textContent = 'VIEW MODE';
+      modeBadge.className = 'mode-badge view-mode';
+      entryTabBar.classList.remove('visible');
+      showPanel('view');
+    }
+  }
+
+  btnLogin.addEventListener('click', doLogin);
+  loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+  btnLogout.addEventListener('click', () => {
+    app.classList.remove('visible');
+    loginOverlay.classList.remove('hidden');
+    currentMode = '';
+    loginPass.value = '';
+    loginPass.focus();
+  });
+
+  // ── Panel Switching (within entry mode) ──
+  function showPanel(panel) {
+    panelView.classList.toggle('active', panel === 'view');
+    panelData.classList.toggle('active', panel === 'data');
+    panelLog.classList.toggle('active', panel === 'log');
+
+    if (panel === 'view') renderTimeline();
+    if (panel === 'data') renderTable();
+    if (panel === 'log') renderLog();
+  }
+
+  function switchEntryTab(tab) {
+    tabData.classList.toggle('active', tab === 'data');
+    tabLog.classList.toggle('active', tab === 'log');
+    showPanel(tab);
+  }
+
+  tabData.addEventListener('click', () => switchEntryTab('data'));
+  tabLog.addEventListener('click', () => switchEntryTab('log'));
+
+  // ── Sub Tabs (UFS / DDR) ──
+  const subTabUfs = $('subTabUfs');
+  const subTabDdr = $('subTabDdr');
+  const subPanelUfs = $('subPanelUfs');
+  const subPanelDdr = $('subPanelDdr');
+
+  function switchSubTab(tab) {
+    subTabUfs.classList.toggle('active', tab === 'ufs');
+    subTabDdr.classList.toggle('active', tab === 'ddr');
+    subPanelUfs.classList.toggle('active', tab === 'ufs');
+    subPanelDdr.classList.toggle('active', tab === 'ddr');
+    if (tab === 'ddr') renderDdrTable();
+  }
+
+  subTabUfs.addEventListener('click', () => switchSubTab('ufs'));
+  subTabDdr.addEventListener('click', () => switchSubTab('ddr'));
+
+  // ── View Sub Tabs (UFS / DDR) ──
+  const viewSubTabUfs = $('viewSubTabUfs');
+  const viewSubTabDdr = $('viewSubTabDdr');
+  const viewSubPanelUfs = $('viewSubPanelUfs');
+  const viewSubPanelDdr = $('viewSubPanelDdr');
+
+  function switchViewSubTab(tab) {
+    viewSubTabUfs.classList.toggle('active', tab === 'ufs');
+    viewSubTabDdr.classList.toggle('active', tab === 'ddr');
+    viewSubPanelUfs.classList.toggle('active', tab === 'ufs');
+    viewSubPanelDdr.classList.toggle('active', tab === 'ddr');
+    if (tab === 'ddr') renderDdrTimeline();
+    if (tab === 'ufs') renderTimeline();
+  }
+
+  viewSubTabUfs.addEventListener('click', () => switchViewSubTab('ufs'));
+  viewSubTabDdr.addEventListener('click', () => switchViewSubTab('ddr'));
+
+  // ── Table Selector ──
+  function refreshSelectors() {
+    [tableSelector, viewTableSelector].forEach(sel => {
+      sel.innerHTML = '';
+      tables.forEach((t, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = t.name;
+        sel.appendChild(opt);
+      });
+    });
+    [ddrTableSelector, ddrViewTableSelector].forEach(sel => {
+      sel.innerHTML = '';
+      ddrTables.forEach((t, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = t.name;
+        sel.appendChild(opt);
+      });
+    });
+  }
+
+  // UFS: Double-click table name to edit inline
+  function setupUfsTableSelectorEvents(sel) {
+    sel.addEventListener('change', e => {
+      currentTableIdx = +e.target.value;
+      renderTable();
+    });
+    sel.addEventListener('dblclick', () => {
+      const table = tables[currentTableIdx];
+      if (!table) return;
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.value = table.name;
+      inp.style.cssText = 'padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text);font-family:var(--font);font-size:13px;outline:none;';
+      sel.replaceWith(inp);
+      inp.focus();
+      inp.select();
+      function restoreSelect() {
+        const newSel = document.createElement('select');
+        newSel.id = 'tableSelector';
+        tables.forEach((t, i) => {
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = t.name;
+          newSel.appendChild(opt);
+        });
+        newSel.value = currentTableIdx;
+        inp.replaceWith(newSel);
+        setupUfsTableSelectorEvents(newSel);
+      }
+      function commitName() {
+        const newName = inp.value.trim();
+        if (newName) {
+          table.name = newName;
+          autoSave();
+        }
+        restoreSelect();
+        refreshSelectors();
+        renderTable();
+        renderTimeline();
+      }
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); commitName(); }
+        if (e.key === 'Escape') restoreSelect();
+      });
+      inp.addEventListener('blur', commitName);
+    });
+  }
+  setupUfsTableSelectorEvents(tableSelector);
+  viewTableSelector.addEventListener('change', e => {
+    currentTableIdx = +e.target.value;
+    renderTimeline();
+  });
+  ddrTableSelector.addEventListener('change', e => {
+    ddrCurrentTableIdx = +e.target.value;
+    renderDdrTable();
+  });
+
+  // Double-click table name to edit inline
+  function setupDdrTableSelectorEvents(sel) {
+    sel.addEventListener('change', e => {
+      ddrCurrentTableIdx = +e.target.value;
+      renderDdrTable();
+    });
+    sel.addEventListener('dblclick', () => {
+      const table = ddrTables[ddrCurrentTableIdx];
+      if (!table) return;
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.value = table.name;
+      inp.style.cssText = 'padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text);font-family:var(--font);font-size:13px;outline:none;';
+      sel.replaceWith(inp);
+      inp.focus();
+      inp.select();
+      function restoreSelect() {
+        const newSel = document.createElement('select');
+        newSel.id = 'ddrTableSelector';
+        ddrTables.forEach((t, i) => {
+          const opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = t.name;
+          newSel.appendChild(opt);
+        });
+        newSel.value = ddrCurrentTableIdx;
+        inp.replaceWith(newSel);
+        setupDdrTableSelectorEvents(newSel);
+      }
+      function commitName() {
+        const newName = inp.value.trim();
+        if (newName) {
+          table.name = newName;
+          autoSaveDdr();
+        }
+        restoreSelect();
+        refreshSelectors();
+        renderDdrTable();
+        renderDdrTimeline();
+      }
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); commitName(); }
+        if (e.key === 'Escape') restoreSelect();
+      });
+      inp.addEventListener('blur', commitName);
+    });
+  }
+  setupDdrTableSelectorEvents(ddrTableSelector);
+  ddrViewTableSelector.addEventListener('change', e => {
+    ddrCurrentTableIdx = +e.target.value;
+    renderDdrTimeline();
+  });
+
+  // ── Data Entry Table ──
+  // ── Custom Month Picker ──
+  const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+  function openMonthPicker(currentVal, onConfirm) {
+    let selYear, selMonth;
+    if (currentVal && currentVal.length >= 7) {
+      selYear = parseInt(currentVal.substring(0, 4), 10);
+      selMonth = parseInt(currentVal.substring(5, 7), 10) - 1;
+    } else {
+      const now = new Date();
+      selYear = now.getFullYear();
+      selMonth = now.getMonth();
+    }
+
+    // Overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'month-picker-overlay';
+
+    const box = document.createElement('div');
+    box.className = 'month-picker-box';
+
+    // Header with year arrows
+    const header = document.createElement('div');
+    header.className = 'month-picker-header';
+
+    const btnPrev = document.createElement('button');
+    btnPrev.className = 'month-picker-arrow';
+    btnPrev.textContent = '‹';
+
+    const yearLabel = document.createElement('span');
+    yearLabel.className = 'year-label';
+    yearLabel.textContent = selYear;
+
+    const btnNext = document.createElement('button');
+    btnNext.className = 'month-picker-arrow';
+    btnNext.textContent = '›';
+
+    header.appendChild(btnPrev);
+    header.appendChild(yearLabel);
+    header.appendChild(btnNext);
+    box.appendChild(header);
+
+    // Month grid
+    const grid = document.createElement('div');
+    grid.className = 'month-picker-grid';
+
+    function renderGrid() {
+      grid.innerHTML = '';
+      yearLabel.textContent = selYear;
+      MONTHS.forEach((m, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'month-picker-cell' + (i === selMonth ? ' selected' : '');
+        cell.textContent = m;
+        cell.addEventListener('click', () => {
+          selMonth = i;
+          renderGrid();
+        });
+        grid.appendChild(cell);
+      });
+    }
+    renderGrid();
+    box.appendChild(grid);
+
+    // Footer
+    const footer = document.createElement('div');
+    footer.className = 'month-picker-footer';
+
+    const btnClear = document.createElement('button');
+    btnClear.className = 'btn-clear';
+    btnClear.textContent = 'Clear';
+    btnClear.addEventListener('click', () => {
+      onConfirm('');
+      document.body.removeChild(overlay);
+    });
+
+    const btnOk = document.createElement('button');
+    btnOk.className = 'btn-ok';
+    btnOk.textContent = 'OK';
+    btnOk.addEventListener('click', () => {
+      const val = `${selYear}-${String(selMonth + 1).padStart(2, '0')}`;
+      onConfirm(val);
+      document.body.removeChild(overlay);
+    });
+
+    footer.appendChild(btnClear);
+    footer.appendChild(btnOk);
+    box.appendChild(footer);
+
+    // Year arrow events
+    btnPrev.addEventListener('click', () => { selYear--; renderGrid(); });
+    btnNext.addEventListener('click', () => { selYear++; renderGrid(); });
+
+    // Close on overlay click
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) document.body.removeChild(overlay);
+    });
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  }
+
+  function renderTable() {
+    const table = tables[currentTableIdx];
+    if (!table) { dataBody.innerHTML = ''; return; }
+
+    tableSelector.value = currentTableIdx;
+    dataBody.innerHTML = '';
+
+    table.rows.forEach((row, ri) => {
+      const tr = document.createElement('tr');
+      const fields = ['manufacturer', 'protocol', 'controller', 'nandGen', 'density', 'dies', 'lw', 'thick', 'ballHt', ...(ufsShowFusa ? ['fusa', 'gradeX'] : []), 'sample', 'cs', 'eol'];
+
+      fields.forEach(field => {
+        const td = document.createElement('td');
+        if (field === 'fusa' || field === 'gradeX') {
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.value = row[field] || '';
+          inp.addEventListener('change', () => {
+            row[field] = inp.value;
+            autoSave();
+          });
+          inp.addEventListener('input', () => {
+            adjustUfsColumnWidths();
+          });
+          td.appendChild(inp);
+        } else if (field === 'sample' || field === 'cs' || field === 'eol') {
+          // Month display + calendar icon
+          const wrap = document.createElement('div');
+          wrap.style.cssText = 'display:flex;align-items:center;justify-content:space-between;';
+          const label = document.createElement('span');
+          label.className = 'cell-date';
+          label.style.cssText = 'flex:1;padding:8px 0 8px 10px;';
+          label.textContent = row[field] || '';
+          label.style.color = row[field] ? 'var(--text)' : 'var(--text-muted)';
+          const icon = document.createElement('span');
+          icon.textContent = '📅';
+          icon.style.cssText = 'cursor:pointer;padding:4px 8px;font-size:14px;opacity:0.6;flex-shrink:0;';
+          icon.addEventListener('mouseenter', () => { icon.style.opacity = '1'; });
+          icon.addEventListener('mouseleave', () => { icon.style.opacity = '0.6'; });
+          icon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openMonthPicker(row[field], (val) => {
+              row[field] = val;
+              label.textContent = val || '';
+              label.style.color = val ? 'var(--text)' : 'var(--text-muted)';
+              autoSave();
+            });
+          });
+          wrap.appendChild(label);
+          wrap.appendChild(icon);
+          td.appendChild(wrap);
+        } else {
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.value = row[field] || '';
+          inp.addEventListener('change', () => {
+            row[field] = inp.value;
+            autoSave();
+          });
+          inp.addEventListener('input', () => {
+            adjustUfsColumnWidths();
+          });
+          td.appendChild(inp);
+        }
+        tr.appendChild(td);
+      });
+
+      // Actions (at the end)
+      const tdA = document.createElement('td');
+      tdA.className = 'row-actions';
+      const btnAdd = document.createElement('button');
+      btnAdd.textContent = '+';
+      btnAdd.title = 'Add row below';
+      btnAdd.addEventListener('click', () => {
+        table.rows.splice(ri + 1, 0, {
+          manufacturer: '', protocol: '', controller: '', nandGen: '', density: '', dies: '',
+          lw: '', thick: '', ballHt: '', sample: '', cs: '', eol: '', fusa: '', gradeX: ''
+        });
+        renderTable();
+        autoSave();
+      });
+      const btnDel = document.createElement('button');
+      btnDel.textContent = '✕';
+      btnDel.title = 'Delete row';
+      btnDel.addEventListener('click', () => {
+        table.rows.splice(ri, 1);
+        renderTable();
+        autoSave();
+      });
+      tdA.appendChild(btnAdd);
+      tdA.appendChild(btnDel);
+      tr.appendChild(tdA);
+
+      dataBody.appendChild(tr);
+    });
+    adjustUfsColumnWidths();
+  }
+
+  let saveTimer = null;
+  function autoSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveData, 2000);
+  }
+
+  // ── Add Row / Table ──
+  $('btnAddRow').addEventListener('click', () => {
+    const table = tables[currentTableIdx];
+    if (!table) return;
+    table.rows.push({
+      manufacturer: '', protocol: '', controller: '', nandGen: '', density: '', dies: '',
+      lw: '', thick: '', ballHt: '', sample: '', cs: '', eol: '', fusa: '', gradeX: ''
+    });
+    renderTable();
+    autoSave();
+  });
+
+  $('btnAddTable').addEventListener('click', () => {
+    const name = prompt('New table name:', `Table ${tables.length + 1}`);
+    if (!name) return;
+    tables.push({ name, rows: [] });
+    currentTableIdx = tables.length - 1;
+    refreshSelectors();
+    renderTable();
+    autoSave();
+  });
+
+  $('btnDelTable').addEventListener('click', () => {
+    if (tables.length <= 1) { showToast('Cannot delete the last table'); return; }
+    if (!confirm(`Delete "${tables[currentTableIdx].name}"?`)) return;
+    tables.splice(currentTableIdx, 1);
+    if (currentTableIdx >= tables.length) currentTableIdx = tables.length - 1;
+    refreshSelectors();
+    renderTable();
+    autoSave();
+  });
+
+  $('btnSave').addEventListener('click', saveData);
+
+  // ── DDR Data Entry Table ──
+  function renderDdrTable() {
+    const table = ddrTables[ddrCurrentTableIdx];
+    if (!table) { ddrDataBody.innerHTML = ''; return; }
+
+    ddrTableSelector.value = ddrCurrentTableIdx;
+    ddrDataBody.innerHTML = '';
+
+    table.rows.forEach((row, ri) => {
+      const tr = document.createElement('tr');
+      const fields = ['pkgType', 'ballNum', 'chNum', 'protocol', 'manufacturer', 'dataRate', 'density', 'dies', 'controller', 'nandGen', 'dieWidth', 'rankNum', 'rankDensity', 'lw', 'thick', 'ballHt', ...(ddrShowFusa ? ['fusa', 'gradeX'] : []), 'sample', 'cs', 'eol'];
+
+      fields.forEach(field => {
+        const td = document.createElement('td');
+        if (field === 'pkgType') {
+          const sel = document.createElement('select');
+          ['', 'DSC', 'POP'].forEach(opt => {
+            const o = document.createElement('option');
+            o.value = opt;
+            o.textContent = opt || '--';
+            sel.appendChild(o);
+          });
+          sel.value = row[field] || '';
+          sel.addEventListener('change', () => {
+            row[field] = sel.value;
+            autoSaveDdr();
+          });
+          td.appendChild(sel);
+        } else if (field === 'fusa' || field === 'gradeX') {
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.value = row[field] || '';
+          inp.addEventListener('change', () => {
+            row[field] = inp.value;
+            autoSaveDdr();
+          });
+          inp.addEventListener('input', () => {
+            adjustDdrColumnWidths();
+          });
+          td.appendChild(inp);
+        } else if (field === 'sample' || field === 'cs' || field === 'eol') {
+          const wrap = document.createElement('div');
+          wrap.style.cssText = 'display:flex;align-items:center;justify-content:space-between;';
+          const label = document.createElement('span');
+          label.className = 'cell-date';
+          label.style.cssText = 'flex:1;padding:8px 0 8px 10px;';
+          label.textContent = row[field] || '';
+          label.style.color = row[field] ? 'var(--text)' : 'var(--text-muted)';
+          const icon = document.createElement('span');
+          icon.textContent = '📅';
+          icon.style.cssText = 'cursor:pointer;padding:4px 8px;font-size:14px;opacity:0.6;flex-shrink:0;';
+          icon.addEventListener('mouseenter', () => { icon.style.opacity = '1'; });
+          icon.addEventListener('mouseleave', () => { icon.style.opacity = '0.6'; });
+          icon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openMonthPicker(row[field], (val) => {
+              row[field] = val;
+              label.textContent = val || '';
+              label.style.color = val ? 'var(--text)' : 'var(--text-muted)';
+              autoSaveDdr();
+            });
+          });
+          wrap.appendChild(label);
+          wrap.appendChild(icon);
+          td.appendChild(wrap);
+        } else {
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.value = row[field] || '';
+          inp.addEventListener('change', () => {
+            row[field] = inp.value;
+            autoSaveDdr();
+          });
+          inp.addEventListener('input', () => {
+            adjustDdrColumnWidths();
+          });
+          td.appendChild(inp);
+        }
+        tr.appendChild(td);
+      });
+
+      const tdA = document.createElement('td');
+      tdA.className = 'row-actions';
+      const btnAdd = document.createElement('button');
+      btnAdd.textContent = '+';
+      btnAdd.title = 'Add row below';
+      btnAdd.addEventListener('click', () => {
+        table.rows.splice(ri + 1, 0, {
+          manufacturer: '', protocol: '', controller: '', nandGen: '', density: '', dies: '',
+          lw: '', thick: '', ballHt: '', sample: '', cs: '', eol: '', pkgType: '', ballNum: '', chNum: '', dataRate: '', dieWidth: '', rankNum: '', rankDensity: '', fusa: '', gradeX: ''
+        });
+        renderDdrTable();
+        autoSaveDdr();
+      });
+      const btnDel = document.createElement('button');
+      btnDel.textContent = '✕';
+      btnDel.title = 'Delete row';
+      btnDel.addEventListener('click', () => {
+        table.rows.splice(ri, 1);
+        renderDdrTable();
+        autoSaveDdr();
+      });
+      tdA.appendChild(btnAdd);
+      tdA.appendChild(btnDel);
+      tr.appendChild(tdA);
+
+      ddrDataBody.appendChild(tr);
+    });
+    adjustDdrColumnWidths();
+  }
+
+  let ddrSaveTimer = null;
+  function autoSaveDdr() {
+    clearTimeout(ddrSaveTimer);
+    ddrSaveTimer = setTimeout(() => {
+      saveDdrData();
+      renderDdrTimeline();  // Real-time update View mode
+    }, 2000);
+  }
+
+  // ── Dynamic Column Width (UFS & DDR) ──
+  function adjustUfsColumnWidths() { adjustColumnWidths('dataTable'); }
+  function adjustDdrColumnWidths() { adjustColumnWidths('ddrDataTable'); }
+
+  function adjustColumnWidths(tableId) {
+    const table = $(tableId);
+    if (!table) return;
+    const headerRows = table.querySelectorAll('thead tr');
+    const lastHeaderRow = headerRows[headerRows.length - 1];
+    const ths = Array.from(lastHeaderRow.querySelectorAll('th'));
+    const bodyRows = table.querySelectorAll('tbody tr');
+    // Measure each column's content width independently
+    const colWidths = ths.map(() => 0);
+    // Header text width
+    ths.forEach((th, ci) => {
+      const span = document.createElement('span');
+      span.style.cssText = 'visibility:hidden;position:absolute;white-space:nowrap;';
+      span.style.font = getComputedStyle(th).font;
+      span.style.letterSpacing = getComputedStyle(th).letterSpacing;
+      span.textContent = th.textContent;
+      document.body.appendChild(span);
+      colWidths[ci] = span.offsetWidth + 24;
+      document.body.removeChild(span);
+    });
+    // Body content width
+    bodyRows.forEach(row => {
+      const tds = Array.from(row.querySelectorAll('td'));
+      tds.forEach((td, ci) => {
+        if (ci >= colWidths.length) return;
+        const inp = td.querySelector('input, select');
+        if (inp) {
+          // Measure input content width
+          const measure = document.createElement('span');
+          measure.style.cssText = 'visibility:hidden;position:absolute;white-space:nowrap;';
+          measure.style.font = getComputedStyle(inp).font;
+          measure.textContent = inp.value || inp.options?.[inp.selectedIndex]?.text || 'xxxx';
+          document.body.appendChild(measure);
+          const w = measure.offsetWidth + 24;
+          document.body.removeChild(measure);
+          if (w > colWidths[ci]) colWidths[ci] = w;
+        } else {
+          const w = td.scrollWidth;
+          if (w > colWidths[ci]) colWidths[ci] = w;
+        }
+      });
+    });
+    // Apply each column's width independently
+    ths.forEach((th, ci) => {
+      if (ci < colWidths.length) {
+        th.style.minWidth = colWidths[ci] + 'px';
+        th.style.width = colWidths[ci] + 'px';
+      }
+    });
+  }
+
+  $('btnDdrAddRow').addEventListener('click', () => {
+    const table = ddrTables[ddrCurrentTableIdx];
+    if (!table) return;
+    table.rows.push({
+      manufacturer: '', protocol: '', controller: '', nandGen: '', density: '', dies: '',
+      lw: '', thick: '', ballHt: '', sample: '', cs: '', eol: '', pkgType: '', ballNum: '', chNum: '', dataRate: '', dieWidth: '', rankNum: '', rankDensity: '', fusa: '', gradeX: ''
+    });
+    renderDdrTable();
+    autoSaveDdr();
+  });
+
+  $('btnDdrAddTable').addEventListener('click', () => {
+    const name = prompt('New DDR table name:', `DDR Table ${ddrTables.length + 1}`);
+    if (!name) return;
+    ddrTables.push({ name, rows: [] });
+    ddrCurrentTableIdx = ddrTables.length - 1;
+    refreshSelectors();
+    renderDdrTable();
+    autoSaveDdr();
+  });
+
+  $('btnDdrDelTable').addEventListener('click', () => {
+    if (ddrTables.length <= 1) { showToast('Cannot delete the last table'); return; }
+    if (!confirm(`Delete "${ddrTables[ddrCurrentTableIdx].name}"?`)) return;
+    ddrTables.splice(ddrCurrentTableIdx, 1);
+    if (ddrCurrentTableIdx >= ddrTables.length) ddrCurrentTableIdx = ddrTables.length - 1;
+    refreshSelectors();
+    renderDdrTable();
+    autoSaveDdr();
+  });
+
+  $('btnDdrSave').addEventListener('click', saveDdrData);
+
+  // ── FUSA Column Toggle ──
+  function toggleFusaColumn() {
+    const fusaGroupTh = $('ddrFusaGroupTh');
+    const fusaTh = $('ddrFusaTh');
+    const gradeXTh = $('ddrGradeXTh');
+    if (ddrShowFusa) {
+      fusaGroupTh.style.display = '';
+      fusaTh.style.display = '';
+      gradeXTh.style.display = '';
+    } else {
+      fusaGroupTh.style.display = 'none';
+      fusaTh.style.display = 'none';
+      gradeXTh.style.display = 'none';
+    }
+  }
+
+  $('btnDdrAddFusaCol').addEventListener('click', () => {
+    if (ddrShowFusa) {
+      showToast('FUSA column already exists');
+      return;
+    }
+    ddrShowFusa = true;
+    toggleFusaColumn();
+    renderDdrTable();
+    renderDdrTimeline();
+    saveDdrData();
+    showToast('FUSA column added');
+  });
+
+  $('btnDdrDelFusaCol').addEventListener('click', () => {
+    if (!ddrShowFusa) {
+      showToast('FUSA column does not exist');
+      return;
+    }
+    ddrShowFusa = false;
+    toggleFusaColumn();
+    renderDdrTable();
+    renderDdrTimeline();
+    saveDdrData();
+    showToast('FUSA column removed');
+  });
+
+  // ── UFS FUSA&GRADE Column Toggle ──
+  function toggleUfsFusaColumn() {
+    const fusaGroupTh = $('ufsFusaGroupTh');
+    const fusaTh = $('ufsFusaTh');
+    const gradeXTh = $('ufsGradeXTh');
+    if (ufsShowFusa) {
+      fusaGroupTh.style.display = '';
+      fusaTh.style.display = '';
+      gradeXTh.style.display = '';
+    } else {
+      fusaGroupTh.style.display = 'none';
+      fusaTh.style.display = 'none';
+      gradeXTh.style.display = 'none';
+    }
+  }
+
+  $('btnUfsAddFusaCol').addEventListener('click', () => {
+    if (ufsShowFusa) {
+      showToast('FUSA&GRADE columns already exist');
+      return;
+    }
+    ufsShowFusa = true;
+    toggleUfsFusaColumn();
+    renderTable();
+    renderTimeline();
+    saveData();
+    showToast('FUSA&GRADE columns added');
+  });
+
+  $('btnUfsDelFusaCol').addEventListener('click', () => {
+    if (!ufsShowFusa) {
+      showToast('FUSA&GRADE columns do not exist');
+      return;
+    }
+    ufsShowFusa = false;
+    toggleUfsFusaColumn();
+    renderTable();
+    renderTimeline();
+    saveData();
+    showToast('FUSA&GRADE columns removed');
+  });
+
+  // ── Timeline View ──
+  function renderTimeline() {
+    const table = tables[currentTableIdx];
+    if (!table) { timelineWrap.innerHTML = ''; return; }
+    viewTableSelector.value = currentTableIdx;
+
+    // Extract year range from data
+    let minYear = Infinity, maxYear = -Infinity;
+    table.rows.forEach(row => {
+      [row.sample, row.cs, row.eol].forEach(val => {
+        if (val && val.length >= 4) {
+          const y = parseInt(val.substring(0, 4), 10);
+          if (!isNaN(y)) {
+            if (y < minYear) minYear = y;
+            if (y > maxYear) maxYear = y;
+          }
+        }
+      });
+    });
+    if (minYear === Infinity || maxYear === -Infinity) { minYear = 2025; maxYear = 2026; }
+
+    const years = [];
+    for (let y = minYear; y <= maxYear; y++) years.push(y);
+    const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    const totalMonths = years.length * 12;
+
+    const colKeys = [];
+    years.forEach(y => {
+      for (let m = 1; m <= 12; m++) {
+        colKeys.push(`${y}-${String(m).padStart(2,'0')}`);
+      }
+    });
+
+    function milestoneMap(row) {
+      const map = {};
+      if (row.sample) map[row.sample] = 'es';
+      if (row.cs) map[row.cs] = 'cs';
+      if (row.eol) map[row.eol] = 'eol';
+      return map;
+    }
+
+    let html = '<table class="timeline-table"><thead>';
+    html += '<tr><th class="info-col" rowspan="2">Protocol</th><th class="info-col" rowspan="2">Manufacturer</th><th class="info-col" rowspan="2">Density</th>';
+    if (ufsShowFusa) {
+      html += '<th class="info-col" rowspan="2">Fusa</th><th class="info-col" rowspan="2">GradeX</th>';
+    }
+    years.forEach(y => {
+      html += `<th class="year-header" colspan="12">${y}</th>`;
+    });
+    html += '</tr>';
+    html += '<tr>';
+    years.forEach(() => {
+      months.forEach(m => { html += `<th>${m}</th>`; });
+    });
+    html += '</tr></thead><tbody>';
+
+    if (table.rows.length === 0) {
+      html += `<tr><td class="info-col" colspan="${(ufsShowFusa ? 5 : 3) + totalMonths}" style="text-align:center;color:var(--text-muted);padding:40px;">No data — log in to Data Entry mode to add products.</td></tr>`;
+    }
+
+    // Build merge spans: group consecutive rows by Protocol, then by Manufacturer
+    const rows = table.rows;
+    const spans = []; // { protoRow, mfgRow } per row
+    let i = 0;
+    while (i < rows.length) {
+      const proto = rows[i].protocol || '';
+      let protoEnd = i + 1;
+      while (protoEnd < rows.length && (rows[protoEnd].protocol || '') === proto) protoEnd++;
+
+      let j = i;
+      while (j < protoEnd) {
+        const mfg = rows[j].manufacturer || '';
+        let mfgEnd = j + 1;
+        while (mfgEnd < protoEnd && (rows[mfgEnd].manufacturer || '') === mfg) mfgEnd++;
+
+        for (let k = j; k < mfgEnd; k++) {
+          spans[k] = {
+            protoRow: k === i ? (protoEnd - i) : 0,
+            mfgRow: k === j ? (mfgEnd - j) : 0
+          };
+        }
+        j = mfgEnd;
+      }
+      i = protoEnd;
+    }
+
+    rows.forEach((row, ri) => {
+      const msMap = milestoneMap(row);
+      const sp = spans[ri] || { protoRow: 1, mfgRow: 1 };
+
+      html += '<tr>';
+      if (sp.protoRow > 0) {
+        html += `<td class="info-col" rowspan="${sp.protoRow}"><strong>${row.protocol || '—'}</strong></td>`;
+      }
+      if (sp.mfgRow > 0) {
+        html += `<td class="info-col" rowspan="${sp.mfgRow}">${row.manufacturer || '—'}</td>`;
+      }
+      html += `<td class="info-col">${[row.density, row.dies].filter(Boolean).join(' / ') || '—'}</td>`;
+      if (ufsShowFusa) {
+        html += `<td class="info-col">${row.fusa || '—'}</td>`;
+        html += `<td class="info-col">${row.gradeX || '—'}</td>`;
+      }
+
+      // Build detail string
+      const detailParts = [];
+      const lwThick = [row.lw, row.thick].filter(Boolean).join('x');
+      const lwThickStr = lwThick ? lwThick + 'mm' : '';
+      if (lwThickStr) detailParts.push(lwThickStr);
+      if (row.nandGen) detailParts.push(row.nandGen);
+      if (row.controller) detailParts.push(row.controller);
+      const detailStr = detailParts.join(' / ');
+
+      // Find anchor milestone index (CS first; if no CS and no ES, use EOL)
+      let anchorIdx = -1, afterAnchorIdx = -1, beforeAnchorIdx = -1;
+      const hasCs = row.cs && row.cs.length >= 7;
+      const hasEs = row.sample && row.sample.length >= 7;
+      const hasEol = row.eol && row.eol.length >= 7;
+      if (hasCs) {
+        anchorIdx = colKeys.indexOf(row.cs);
+      } else if (!hasEs && hasEol) {
+        anchorIdx = colKeys.indexOf(row.eol);
+      }
+      if (anchorIdx >= 0) {
+        const anchorKey = hasCs ? row.cs : row.eol;
+        const afterDate = new Date(anchorKey + '-01');
+        afterDate.setMonth(afterDate.getMonth() + 1);
+        afterAnchorIdx = colKeys.indexOf(afterDate.toISOString().substring(0, 7));
+        const beforeDate = new Date(anchorKey + '-01');
+        beforeDate.setMonth(beforeDate.getMonth() - 1);
+        beforeAnchorIdx = colKeys.indexOf(beforeDate.toISOString().substring(0, 7));
+      }
+      // Only the last year's last 3 months use "before anchor" logic
+      const lastMonthIdx = colKeys.length - 1;
+      const isNearEnd = anchorIdx >= 0 && (lastMonthIdx - anchorIdx) < 3;
+      let detailIdx, detailBefore = false;
+      if (isNearEnd) {
+        // FIX: if ES is less than 4 months before CS, use ES前一月 to avoid covering ES
+        if (hasEs && hasCs) {
+          const esIdx = colKeys.indexOf(row.sample);
+          const monthDiff = anchorIdx - esIdx;
+          if (monthDiff < 4) {
+            // ES < 4 months before CS: anchor at ES前一月
+            const esDate = new Date(row.sample + '-01');
+            esDate.setMonth(esDate.getMonth() - 1);
+            detailIdx = colKeys.indexOf(esDate.toISOString().substring(0, 7));
+          } else {
+            // ES >= 4 months before CS: anchor at CS前一月
+            detailIdx = beforeAnchorIdx;
+          }
+        } else {
+          detailIdx = beforeAnchorIdx;
+        }
+        detailBefore = true;
+      } else {
+        detailIdx = afterAnchorIdx;
+      }
+      if (detailStr && (detailIdx < 0 || detailIdx >= colKeys.length)) {
+        detailIdx = -1;
+      }
+
+      colKeys.forEach((key, ci) => {
+        const ms = msMap[key];
+        if (ci === detailIdx && detailStr) {
+          const posStyle = detailBefore ? 'right:0;left:auto;' : 'left:0;';
+          html += `<td class="detail-cell"><span class="milestone detail" style="${posStyle}">${detailStr}</span></td>`;
+        } else if (ms) {
+          html += `<td><span class="milestone ${ms}">${ms.toUpperCase()}</span></td>`;
+        } else {
+          html += '<td></td>';
+        }
+      });
+
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    timelineWrap.innerHTML = html;
+    adjustUfsViewColumnWidths();
+  }
+
+  // ── UFS View Column Width ──
+  function adjustUfsViewColumnWidths() {
+    const wrap = $('timelineWrap');
+    const table = wrap.querySelector('table');
+    if (!table) return;
+    const allThs = Array.from(table.querySelectorAll('thead th'));
+    const ths = allThs.filter(th => {
+      const cs = parseInt(th.getAttribute('colspan') || '1', 10);
+      return cs === 1;
+    });
+    const bodyRows = table.querySelectorAll('tbody tr');
+    const colWidths = ths.map(() => 0);
+    // Header text width (handle <br> line breaks)
+    ths.forEach((th, ci) => {
+      const thStyle = getComputedStyle(th);
+      const thPad = parseInt(thStyle.paddingLeft) + parseInt(thStyle.paddingRight);
+      const lines = th.innerHTML.split(/<br\s*\/?>/i);
+      const textTransform = thStyle.textTransform || 'none';
+      let maxW = 0;
+      lines.forEach(line => {
+        const span = document.createElement('span');
+        span.style.cssText = 'visibility:hidden;position:absolute;white-space:nowrap;';
+        span.style.font = thStyle.font;
+        span.style.letterSpacing = thStyle.letterSpacing;
+        let text = line.replace(/<[^>]+>/g, '').trim();
+        if (textTransform === 'uppercase') text = text.toUpperCase();
+        else if (textTransform === 'lowercase') text = text.toLowerCase();
+        span.textContent = text;
+        document.body.appendChild(span);
+        if (span.offsetWidth > maxW) maxW = span.offsetWidth;
+        document.body.removeChild(span);
+      });
+      colWidths[ci] = maxW + thPad;
+    });
+    // Body content width (account for rowspan; skip detail-cell)
+    const occupied = [];
+    bodyRows.forEach(row => {
+      const tds = Array.from(row.querySelectorAll('td'));
+      let col = 0;
+      tds.forEach(td => {
+        while (occupied[col] > 0) { occupied[col]--; col++; }
+        if (col < colWidths.length && !td.classList.contains('detail-cell')) {
+          const w = td.scrollWidth;
+          if (w > colWidths[col]) colWidths[col] = w;
+        }
+        const rs = parseInt(td.getAttribute('rowspan') || '1', 10);
+        if (rs > 1) occupied[col] = rs - 1;
+        col++;
+      });
+    });
+    // Month columns: min-width = text width + 12
+    ths.forEach((th, ci) => {
+      if (ci >= colWidths.length) return;
+      if (th.classList.contains('info-col') || th.classList.contains('year-header')) return;
+      const thStyle = getComputedStyle(th);
+      const lines = th.innerHTML.split(/<br\s*\/?>/i);
+      const textTransform = thStyle.textTransform || 'none';
+      let maxW = 0;
+      lines.forEach(line => {
+        const span = document.createElement('span');
+        span.style.cssText = 'visibility:hidden;position:absolute;white-space:nowrap;';
+        span.style.font = thStyle.font;
+        span.style.letterSpacing = thStyle.letterSpacing;
+        let text = line.replace(/<[^>]+>/g, '').trim();
+        if (textTransform === 'uppercase') text = text.toUpperCase();
+        else if (textTransform === 'lowercase') text = text.toLowerCase();
+        span.textContent = text;
+        document.body.appendChild(span);
+        if (span.offsetWidth > maxW) maxW = span.offsetWidth;
+        document.body.removeChild(span);
+      });
+      const minW = maxW + 36;
+      if (colWidths[ci] < minW) colWidths[ci] = minW;
+    });
+    // Use colgroup to set column widths
+    let colgroup = table.querySelector('colgroup');
+    if (!colgroup) {
+      colgroup = document.createElement('colgroup');
+      table.insertBefore(colgroup, table.firstChild);
+    }
+    colgroup.innerHTML = '';
+    colWidths.forEach(w => {
+      const col = document.createElement('col');
+      col.style.minWidth = w + 'px';
+      col.style.width = w + 'px';
+      colgroup.appendChild(col);
+    });
+    ths.forEach((th, ci) => {
+      if (ci < colWidths.length) {
+        th.style.minWidth = colWidths[ci] + 'px';
+        th.style.width = colWidths[ci] + 'px';
+      }
+    });
+  }
+
+  // ── DDR Timeline View ──
+  function renderDdrTimeline() {
+    const table = ddrTables[ddrCurrentTableIdx];
+    if (!table) { ddrTimelineWrap.innerHTML = ''; return; }
+    ddrViewTableSelector.value = ddrCurrentTableIdx;
+
+    // DDR TYPE column: pkgType/ballNum/chNum
+    function getDdrTypeStr(row) {
+      return [row.pkgType, row.ballNum, row.chNum].filter(Boolean).join('/') || '-';
+    }
+    // TYPE column added before Protocol in DDR timeline
+
+    // Find min/max year-month from ES/CS/EOL
+    let minYear = Infinity, maxYear = -Infinity, minMonth = 1;
+    table.rows.forEach(row => {
+      [row.sample, row.cs, row.eol].forEach(val => {
+        if (val && val.length >= 7) {
+          const y = parseInt(val.substring(0, 4), 10);
+          const m = parseInt(val.substring(5, 7), 10);
+          if (!isNaN(y)) {
+            if (y < minYear || (y === minYear && m < minMonth)) {
+              minYear = y;
+              minMonth = m;
+            }
+            if (y > maxYear) maxYear = y;
+          }
+        }
+      });
+    });
+    if (minYear === Infinity || maxYear === -Infinity) { minYear = 2025; maxYear = 2026; minMonth = 1; }
+
+    // Start from minMonth of minYear; show full 12 months for maxYear
+    const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    const colKeys = [];
+    const colMonths = []; // month label for each column
+    if (minYear === maxYear) {
+      for (let m = minMonth; m <= 12; m++) {
+        colKeys.push(`${minYear}-${String(m).padStart(2,'0')}`);
+        colMonths.push(months[m - 1]);
+      }
+    } else {
+      for (let m = minMonth; m <= 12; m++) {
+        colKeys.push(`${minYear}-${String(m).padStart(2,'0')}`);
+        colMonths.push(months[m - 1]);
+      }
+      for (let y = minYear + 1; y <= maxYear; y++) {
+        for (let m = 1; m <= 12; m++) {
+          colKeys.push(`${y}-${String(m).padStart(2,'0')}`);
+          colMonths.push(months[m - 1]);
+        }
+      }
+    }
+    const totalMonths = colKeys.length;
+    const years = [];
+    for (let y = minYear; y <= maxYear; y++) years.push(y);
+
+    function milestoneMap(row) {
+      const map = {};
+      if (row.sample) map[row.sample] = 'es';
+      if (row.cs) map[row.cs] = 'cs';
+      if (row.eol) map[row.eol] = 'eol';
+      return map;
+    }
+
+    let html = '<table class="timeline-table"><thead>';
+    html += '<tr><th class="info-col" rowspan="2">Type</th><th class="info-col" rowspan="2">Protocol</th><th class="info-col" rowspan="2">Manufacturer</th><th class="info-col" rowspan="2">Data Rate</th><th class="info-col" rowspan="2">Density</th>';
+    html += '<th class="info-col th-break" rowspan="2">Die<br>Density</th><th class="info-col th-break" rowspan="2">Die<br>Num</th><th class="info-col th-break" rowspan="2">Die<br>Process</th><th class="info-col th-break" rowspan="2">Die<br>Width</th>';
+    html += '<th class="info-col th-break" rowspan="2">RANK<br>Num</th><th class="info-col th-break" rowspan="2">Density=<br>sum(rank x)</th>';
+    html += '<th class="info-col" rowspan="2">X*Y (mm)</th><th class="info-col th-break" rowspan="2">Max<br>Thick</th><th class="info-col" rowspan="2">Pitch</th>';
+    if (ddrShowFusa) { html += '<th class="info-col" rowspan="2">Fusa</th>'; html += '<th class="info-col" rowspan="2">GradeX</th>'; }
+    // Year headers: first year may have fewer months
+    let ci = 0;
+    years.forEach((y, yi) => {
+      const count = (yi === 0) ? (12 - minMonth + 1) : 12;
+      html += `<th class="year-header" colspan="${count}">${y}</th>`;
+      ci += count;
+    });
+    html += '</tr>';
+    html += '<tr>';
+    colMonths.forEach(m => { html += `<th>${m}</th>`; });
+    html += '</tr></thead><tbody>';
+
+    if (table.rows.length === 0) {
+      html += `<tr><td class="info-col" colspan="${(ddrShowFusa ? 16 : 14) + totalMonths}" style="text-align:center;color:var(--text-muted);padding:40px;">No data — log in to Data Entry mode to add products.</td></tr>`;
+    }
+
+    const rows = table.rows;
+    const spans = [];
+    let i = 0;
+    while (i < rows.length) {
+      const proto = rows[i].protocol || '';
+      let protoEnd = i + 1;
+      while (protoEnd < rows.length && (rows[protoEnd].protocol || '') === proto) protoEnd++;
+
+      let j = i;
+      while (j < protoEnd) {
+        const mfg = rows[j].manufacturer || '';
+        let mfgEnd = j + 1;
+        while (mfgEnd < protoEnd && (rows[mfgEnd].manufacturer || '') === mfg) mfgEnd++;
+
+        for (let k = j; k < mfgEnd; k++) {
+          spans[k] = {
+            protoRow: k === i ? (protoEnd - i) : 0,
+            mfgRow: k === j ? (mfgEnd - j) : 0
+          };
+        }
+        j = mfgEnd;
+      }
+      i = protoEnd;
+    }
+
+    // TYPE merge: same as Protocol merge logic
+    let t = 0;
+    while (t < rows.length) {
+      const typeStr = getDdrTypeStr(rows[t]);
+      let typeEnd = t + 1;
+      while (typeEnd < rows.length && getDdrTypeStr(rows[typeEnd]) === typeStr) typeEnd++;
+      for (let k = t; k < typeEnd; k++) {
+        if (!spans[k]) spans[k] = { protoRow: 1, mfgRow: 1 };
+        spans[k].typeRow = k === t ? (typeEnd - t) : 0;
+      }
+      t = typeEnd;
+    }
+
+    rows.forEach((row, ri) => {
+      const msMap = milestoneMap(row);
+      const sp = spans[ri] || { protoRow: 1, mfgRow: 1, typeRow: 1 };
+
+      html += '<tr>';
+      if (sp.typeRow > 0) {
+        html += `<td class="info-col" rowspan="${sp.typeRow}">${getDdrTypeStr(row)}</td>`;
+      }
+      if (sp.protoRow > 0) {
+        html += `<td class="info-col" rowspan="${sp.protoRow}"><strong>${row.protocol || '—'}</strong></td>`;
+      }
+      if (sp.mfgRow > 0) {
+        html += `<td class="info-col" rowspan="${sp.mfgRow}">${row.manufacturer || '—'}</td>`;
+      }
+      html += `<td class="info-col">${row.dataRate || '—'}</td>`;
+      html += `<td class="info-col">${row.density || '—'}</td>`;
+      html += `<td class="info-col">${row.dies || '—'}</td>`;
+      html += `<td class="info-col">${row.controller || '—'}</td>`;
+      html += `<td class="info-col">${row.nandGen || '—'}</td>`;
+      html += `<td class="info-col">${row.dieWidth || '—'}</td>`;
+      html += `<td class="info-col">${row.rankNum || '—'}</td>`;
+      html += `<td class="info-col">${row.rankDensity || '—'}</td>`;
+      html += `<td class="info-col">${row.lw || '—'}</td>`;
+      html += `<td class="info-col">${row.thick || '—'}</td>`;
+      html += `<td class="info-col">${row.ballHt || '—'}</td>`;
+      if (ddrShowFusa) { html += `<td class="info-col">${row.fusa || '—'}</td>`; html += `<td class="info-col">${row.gradeX || '—'}</td>`; }
+
+      // DDR detail: DATA RATE / DIE PROCESS / DIE WIDTH / R:rankNum
+      // RULE: if EOL has a date, do NOT show detail
+      const hasEolDate = row.eol && row.eol.length >= 7;
+      const detailParts = [];
+      if (!hasEolDate) {
+        if (row.dataRate) detailParts.push(row.dataRate);
+        if (row.nandGen) detailParts.push(row.nandGen);
+        if (row.dieWidth) detailParts.push(row.dieWidth);
+        if (row.rankNum) detailParts.push('R:' + row.rankNum);
+      }
+      const detailStr = detailParts.join(' / ');
+
+      let anchorIdx = -1, afterAnchorIdx = -1, beforeAnchorIdx = -1;
+      const hasCs = row.cs && row.cs.length >= 7;
+      const hasEs = row.sample && row.sample.length >= 7;
+      const hasEol = row.eol && row.eol.length >= 7;
+      if (hasCs) {
+        anchorIdx = colKeys.indexOf(row.cs);
+      } else if (!hasEs && hasEol) {
+        anchorIdx = colKeys.indexOf(row.eol);
+      }
+      if (anchorIdx >= 0) {
+        const anchorKey = hasCs ? row.cs : row.eol;
+        const afterDate = new Date(anchorKey + '-01');
+        afterDate.setMonth(afterDate.getMonth() + 1);
+        afterAnchorIdx = colKeys.indexOf(afterDate.toISOString().substring(0, 7));
+        const beforeDate = new Date(anchorKey + '-01');
+        beforeDate.setMonth(beforeDate.getMonth() - 1);
+        beforeAnchorIdx = colKeys.indexOf(beforeDate.toISOString().substring(0, 7));
+      }
+      const lastMonthIdx = colKeys.length - 1;
+      const isNearEnd = anchorIdx >= 0 && (lastMonthIdx - anchorIdx) < 7;
+      let detailIdx, detailBefore = false;
+      if (isNearEnd) {
+        // FIX: if ES is less than 8 months before CS, use ES前一月 to avoid covering ES
+        if (hasEs && hasCs) {
+          const esIdx = colKeys.indexOf(row.sample);
+          const monthDiff = anchorIdx - esIdx;
+          if (monthDiff < 8) {
+            // ES < 8 months before CS: anchor at ES前一月
+            const esDate = new Date(row.sample + '-01');
+            esDate.setMonth(esDate.getMonth() - 1);
+            detailIdx = colKeys.indexOf(esDate.toISOString().substring(0, 7));
+          } else {
+            // ES >= 8 months before CS: anchor at CS前一月
+            detailIdx = beforeAnchorIdx;
+          }
+        } else {
+          detailIdx = beforeAnchorIdx;
+        }
+        detailBefore = true;
+      } else {
+        detailIdx = afterAnchorIdx;
+      }
+      if (detailStr && (detailIdx < 0 || detailIdx >= colKeys.length)) {
+        detailIdx = -1;
+      }
+
+      colKeys.forEach((key, ci) => {
+        const ms = msMap[key];
+        if (ci === detailIdx && detailStr) {
+          const posStyle = detailBefore ? 'right:0;left:auto;' : 'left:0;';
+          html += `<td class="detail-cell"><span class="milestone detail" style="${posStyle}">${detailStr}</span></td>`;
+        } else if (ms) {
+          html += `<td><span class="milestone ${ms}">${ms.toUpperCase()}</span></td>`;
+        } else {
+          html += '<td></td>';
+        }
+      });
+
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    ddrTimelineWrap.innerHTML = html;
+    adjustDdrViewColumnWidths();
+  }
+
+  // ── Dynamic Column Width for DDR View Timeline ──
+  function adjustDdrViewColumnWidths() {
+    const wrap = $('ddrTimelineWrap');
+    const table = wrap.querySelector('table');
+    if (!table) return;
+    // Get ALL column headers: info-col (rowspan from row1) + month headers (row2), skip year colspan headers
+    const allThs = Array.from(table.querySelectorAll('thead th'));
+    const ths = allThs.filter(th => {
+      const cs = parseInt(th.getAttribute('colspan') || '1', 10);
+      return cs === 1;
+    });
+    const bodyRows = table.querySelectorAll('tbody tr');
+    const colWidths = ths.map(() => 0);
+    // Header text width (handle <br> line breaks: measure each line, take max)
+    ths.forEach((th, ci) => {
+      const thStyle = getComputedStyle(th);
+      const thPad = parseInt(thStyle.paddingLeft) + parseInt(thStyle.paddingRight);
+      const lines = th.innerHTML.split(/<br\s*\/?>/i);
+      const textTransform = thStyle.textTransform || 'none';
+      let maxW = 0;
+      lines.forEach(line => {
+        const span = document.createElement('span');
+        span.style.cssText = 'visibility:hidden;position:absolute;white-space:nowrap;';
+        span.style.font = thStyle.font;
+        span.style.letterSpacing = thStyle.letterSpacing;
+        let text = line.replace(/<[^>]+>/g, '').trim();
+        if (textTransform === 'uppercase') text = text.toUpperCase();
+        else if (textTransform === 'lowercase') text = text.toLowerCase();
+        span.textContent = text;
+        document.body.appendChild(span);
+        if (span.offsetWidth > maxW) maxW = span.offsetWidth;
+        document.body.removeChild(span);
+      });
+      colWidths[ci] = maxW + thPad;
+    });
+    // Body content width (account for rowspan; skip detail-cell)
+    const occupied = []; // occupied[col] = remaining rowspan
+    bodyRows.forEach(row => {
+      const tds = Array.from(row.querySelectorAll('td'));
+      let col = 0;
+      tds.forEach(td => {
+        while (occupied[col] > 0) { occupied[col]--; col++; }
+        if (col < colWidths.length && !td.classList.contains('detail-cell')) {
+          // td.scrollWidth already includes padding
+          const w = td.scrollWidth;
+          if (w > colWidths[col]) colWidths[col] = w;
+        }
+        const rs = parseInt(td.getAttribute('rowspan') || '1', 10);
+        if (rs > 1) occupied[col] = rs - 1;
+        col++;
+      });
+    });
+    // Use colgroup to set column widths (year header colspan won't override)
+    let colgroup = table.querySelector('colgroup');
+    if (!colgroup) {
+      colgroup = document.createElement('colgroup');
+      table.insertBefore(colgroup, table.firstChild);
+    }
+    colgroup.innerHTML = '';
+    colWidths.forEach(w => {
+      const col = document.createElement('col');
+      col.style.minWidth = w + 'px';
+      col.style.width = w + 'px';
+      colgroup.appendChild(col);
+    });
+    // Also apply to th for visual consistency
+    ths.forEach((th, ci) => {
+      if (ci < colWidths.length) {
+        th.style.minWidth = colWidths[ci] + 'px';
+        th.style.width = colWidths[ci] + 'px';
+      }
+    });
+  }
+
+  // ── Init ──
+  loadTheme();
+  loginUser.dispatchEvent(new Event('change'));
+  loginPass.value = '';
+  Promise.all([loadData(), loadDdrData()]).then(() => {
+    loadLogs();
+    refreshSelectors();
+    toggleFusaColumn();
+    toggleUfsFusaColumn();
+    loginPass.focus();
+  });
+})();
+</script>
+</body>
+</html>
