@@ -1086,6 +1086,10 @@
   }
 
   // ── UFS Data (GitHub: roadmap_ufs.json) ──
+  // 写入锁：防止快速多次点击导致并发 SHA 冲突
+  let ufsSaveLock = false, ufsSavePending = false;
+  let ddrSaveLock = false, ddrSavePending = false;
+
   async function loadData() {
     if (!ensureToken()) {
       document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;font-size:18px;color:#c53030;">未输入 GitHub Token，无法加载数据。<br>请刷新页面重新输入。</div>';
@@ -1105,11 +1109,18 @@
 
   async function saveData() {
     if (!ensureToken()) { showToast('❌ 未输入 Token'); return; }
-    const newSha = await ghSaveFile(GH_API_UFS, {
-      tables: tables,
-      showFusa: ufsShowFusa
-    }, 'UFS');
-    if (newSha) ghShaUfs = newSha;
+    if (ufsSaveLock) { ufsSavePending = true; return; } // 正在保存，标记待保存
+    ufsSaveLock = true;
+    try {
+      const newSha = await ghSaveFile(GH_API_UFS, {
+        tables: tables,
+        showFusa: ufsShowFusa
+      }, 'UFS');
+      if (newSha) ghShaUfs = newSha;
+    } finally {
+      ufsSaveLock = false;
+      if (ufsSavePending) { ufsSavePending = false; saveData(); } // 补保存
+    }
   }
 
   // ── DDR Data (GitHub: roadmap_ddr.json) ──
@@ -1129,11 +1140,18 @@
 
   async function saveDdrData() {
     if (!ensureToken()) { showToast('❌ 未输入 Token'); return; }
-    const newSha = await ghSaveFile(GH_API_DDR, {
-      tables: ddrTables,
-      showFusa: ddrShowFusa
-    }, 'DDR');
-    if (newSha) ghShaDdr = newSha;
+    if (ddrSaveLock) { ddrSavePending = true; return; } // 正在保存，标记待保存
+    ddrSaveLock = true;
+    try {
+      const newSha = await ghSaveFile(GH_API_DDR, {
+        tables: ddrTables,
+        showFusa: ddrShowFusa
+      }, 'DDR');
+      if (newSha) ghShaDdr = newSha;
+    } finally {
+      ddrSaveLock = false;
+      if (ddrSavePending) { ddrSavePending = false; saveDdrData(); } // 补保存
+    }
   }
 
   // ── Log ──
