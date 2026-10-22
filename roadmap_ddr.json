@@ -5,7 +5,7 @@
       "rows": [
         {
           "manufacturer": "Samsung",
-          "protocol": "DDR5",
+          "protocol": "LPDDR6",
           "pkgType": "DSC",
           "ballNum": "646ball",
           "chNum": "4",
