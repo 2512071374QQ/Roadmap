@@ -53,7 +53,7 @@
         },
         {
           "manufacturer": "",
-          "protocol": "",
+          "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "V8",
           "density": "",
@@ -69,7 +69,7 @@
         },
         {
           "manufacturer": "",
-          "protocol": "",
+          "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "V8",
           "density": "",
@@ -85,7 +85,7 @@
         },
         {
           "manufacturer": "",
-          "protocol": "",
+          "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "V9",
           "density": "",
