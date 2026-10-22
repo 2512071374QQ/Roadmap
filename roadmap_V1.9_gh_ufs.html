@@ -919,18 +919,31 @@
   const LOG_MAX = 50;
 
   // ── GitHub Config ──
-  // Token assembled from char codes at runtime to avoid secret scanning
-  const GH_TOKEN = String.fromCharCode(103,104,112,95,111,90,102,72,111,74,66,85,109,75,57,114,103,111,81,114,83,120,54,84,103,103,79,52,54,78,116,67,57,50,99,56,97,52,99);
   const GH_OWNER = '2512071374QQ';
   const GH_REPO  = 'Roadmap';
   const GH_PATH  = 'roadmap.json';
   const GH_API   = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_PATH;
-  const GH_HEADERS = {
-    'Authorization': 'token ' + GH_TOKEN,
-    'Accept': 'application/vnd.github.v3+json',
-    'Content-Type': 'application/json'
-  };
+  let GH_TOKEN = sessionStorage.getItem('gh_token') || '';
   let ghFileSha = null;
+
+  function getHeaders() {
+    return {
+      'Authorization': 'token ' + GH_TOKEN,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    };
+  }
+
+  function ensureToken() {
+    if (GH_TOKEN) return true;
+    const input = prompt('请输入 GitHub Personal Access Token:');
+    if (input && input.trim()) {
+      GH_TOKEN = input.trim();
+      sessionStorage.setItem('gh_token', GH_TOKEN);
+      return true;
+    }
+    return false;
+  }
 
   // ── UFS Default Data ──
   const defaultTables = [
@@ -1024,9 +1037,16 @@
 
   // ── UFS Data (GitHub) ──
   async function loadData() {
+    if (!ensureToken()) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;font-size:18px;color:#c53030;">未输入 GitHub Token，无法加载数据。<br>请刷新页面重新输入。</div>';
+      throw new Error('No token');
+    }
     try {
-      const res = await fetch(GH_API, { headers: GH_HEADERS });
-      if (!res.ok) throw new Error('GitHub API ' + res.status);
+      const res = await fetch(GH_API, { headers: getHeaders() });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error('GitHub API ' + res.status + ' - ' + (err.message || ''));
+      }
       const file = await res.json();
       ghFileSha = file.sha;
       const json = JSON.parse(atob(file.content.replace(/\n/g, '')));
@@ -1038,9 +1058,10 @@
   }
 
   async function saveData() {
+    if (!ensureToken()) { showToast('❌ 未输入 Token'); return; }
     // 先 GET 最新 SHA，避免 409 Conflict
     try {
-      const getRes = await fetch(GH_API, { headers: GH_HEADERS });
+      const getRes = await fetch(GH_API, { headers: getHeaders() });
       if (!getRes.ok) throw new Error('GET ' + getRes.status);
       const file = await getRes.json();
       ghFileSha = file.sha;
@@ -1053,7 +1074,7 @@
     try {
       const putRes = await fetch(GH_API, {
         method: 'PUT',
-        headers: GH_HEADERS,
+        headers: getHeaders(),
         body: JSON.stringify({
           message: 'Update UFS roadmap - ' + new Date().toISOString(),
           content: content,
