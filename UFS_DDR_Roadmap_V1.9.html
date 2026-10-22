@@ -686,7 +686,10 @@
     <p class="subtitle">ROADMAP MANAGEMENT SYSTEM</p>
 
     <label for="loginUser">Username</label>
-    <input type="text" id="loginUser" placeholder="Enter username" value="admin" autocomplete="username">
+    <select id="loginUser">
+      <option value="Normal User">Normal User</option>
+      <option value="Administrator">Administrator</option>
+    </select>
 
     <label for="loginPass">Password</label>
     <input type="password" id="loginPass" placeholder="Enter password" value="" autocomplete="current-password">
@@ -1250,27 +1253,55 @@
   }
 
   // ── Login ──
+  // ── User Accounts & Permissions ──
+  const USERS = {
+    'Normal User':    { password: '123456', modes: ['view'] },
+    'Administrator':  { password: '12345',  modes: ['view', 'entry'] }
+  };
+
+  // User switch: restrict mode options based on permissions
+  loginUser.addEventListener('change', () => {
+    const account = USERS[loginUser.value];
+    const entryOpt = loginMode.querySelector('option[value="entry"]');
+    if (account && !account.modes.includes('entry')) {
+      entryOpt.disabled = true;
+      entryOpt.textContent = 'Data Entry — (No permission)';
+      loginMode.value = 'view';
+    } else {
+      entryOpt.disabled = false;
+      entryOpt.textContent = 'Data Entry — Edit tables & logs';
+    }
+  });
+
   function doLogin() {
     const user = loginUser.value.trim();
-    if (!user) { loginUser.focus(); return; }
+    const pass = loginPass.value;
+    const account = USERS[user];
+    if (!account) { showToast('❌ Unknown user'); return; }
+    if (pass !== account.password) {
+      showToast('❌ Wrong password');
+      loginPass.value = '';
+      loginPass.focus();
+      return;
+    }
+    const mode = loginMode.value;
+    if (!account.modes.includes(mode)) {
+      showToast('❌ No permission for ' + mode + ' mode');
+      return;
+    }
     currentUser = user;
     userInfo.textContent = user;
     loginOverlay.classList.add('hidden');
     app.classList.add('visible');
-
-    const mode = loginMode.value;
     currentMode = mode;
 
     if (mode === 'entry') {
-      // Record log entry
       addLogEntry(user);
-      // Show entry mode UI
       modeBadge.textContent = 'ENTRY MODE';
       modeBadge.className = 'mode-badge entry-mode';
       entryTabBar.classList.add('visible');
       switchEntryTab('data');
     } else {
-      // Show view mode UI
       modeBadge.textContent = 'VIEW MODE';
       modeBadge.className = 'mode-badge view-mode';
       entryTabBar.classList.remove('visible');
@@ -1280,13 +1311,13 @@
 
   btnLogin.addEventListener('click', doLogin);
   loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-  loginUser.addEventListener('keydown', e => { if (e.key === 'Enter') loginPass.focus(); });
 
   btnLogout.addEventListener('click', () => {
     app.classList.remove('visible');
     loginOverlay.classList.remove('hidden');
     currentMode = '';
-    loginUser.focus();
+    loginPass.value = '';
+    loginPass.focus();
   });
 
   // ── Panel Switching (within entry mode) ──
@@ -2588,12 +2619,14 @@
 
   // ── Init ──
   loadTheme();
+  loginUser.dispatchEvent(new Event('change'));
+  loginPass.value = '';
   Promise.all([loadData(), loadDdrData()]).then(() => {
     loadLogs();
     refreshSelectors();
     toggleFusaColumn();
     toggleUfsFusaColumn();
-    loginUser.focus();
+    loginPass.focus();
   });
 })();
 </script>
