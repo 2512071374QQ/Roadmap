@@ -52,7 +52,23 @@
           "gradeX": ""
         },
         {
-          "manufacturer": "",
+          "manufacturer": "Hynix",
+          "protocol": "UFS 4.1",
+          "controller": "",
+          "nandGen": "",
+          "density": "",
+          "dies": "",
+          "lw": "",
+          "thick": "",
+          "ballHt": "",
+          "sample": "",
+          "cs": "",
+          "eol": "",
+          "fusa": "",
+          "gradeX": ""
+        },
+        {
+          "manufacturer": "Hynix",
           "protocol": "",
           "controller": "",
           "nandGen": "",
@@ -68,23 +84,7 @@
           "gradeX": ""
         },
         {
-          "manufacturer": "",
-          "protocol": "",
-          "controller": "",
-          "nandGen": "",
-          "density": "",
-          "dies": "",
-          "lw": "",
-          "thick": "",
-          "ballHt": "",
-          "sample": "",
-          "cs": "",
-          "eol": "",
-          "fusa": "",
-          "gradeX": ""
-        },
-        {
-          "manufacturer": "",
+          "manufacturer": "Hynix",
           "protocol": "",
           "controller": "",
           "nandGen": "",
