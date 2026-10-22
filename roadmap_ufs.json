@@ -72,7 +72,7 @@
           "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "V8",
-          "density": "",
+          "density": "512G",
           "dies": "",
           "lw": "",
           "thick": "",
