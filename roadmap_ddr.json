@@ -14,7 +14,7 @@
           "dies": "32Gb T63M",
           "controller": "4",
           "nandGen": "1γ",
-          "dieWidth": "16",
+          "dieWidth": "24",
           "rankNum": "2",
           "rankDensity": "8Gx2",
           "lw": "9x13",
