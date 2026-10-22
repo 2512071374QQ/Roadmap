@@ -6,7 +6,7 @@
         {
           "manufacturer": "Samsung",
           "protocol": "UFS 4.1",
-          "controller": "",
+          "controller": "Savona",
           "nandGen": "V9",
           "density": "256G",
           "dies": "512Gb x4",
@@ -22,7 +22,7 @@
         {
           "manufacturer": "Samsung",
           "protocol": "UFS 4.1",
-          "controller": "",
+          "controller": "Savona",
           "nandGen": "V9",
           "density": "512G",
           "dies": "1Tb x4",
@@ -38,7 +38,7 @@
         {
           "manufacturer": "Samsung",
           "protocol": "UFS 4.1",
-          "controller": "",
+          "controller": "Savona",
           "nandGen": "V9",
           "density": "1T",
           "dies": "1Tb x8",
