@@ -12,7 +12,7 @@
           "dataRate": "12.8Gbps",
           "density": "16GB",
           "dies": "32Gb T63M",
-          "controller": "",
+          "controller": "4",
           "nandGen": "V8",
           "dieWidth": "16",
           "rankNum": "2",
