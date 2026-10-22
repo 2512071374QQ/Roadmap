@@ -1,0 +1,58 @@
+{
+  "tables": [
+    {
+      "name": "Table 1 — UFS 4.1 Roadmap",
+      "rows": [
+        {
+          "manufacturer": "Samsung",
+          "protocol": "UFS 4.1",
+          "controller": "",
+          "nandGen": "",
+          "density": "256G",
+          "dies": "512Gb x4",
+          "lw": "9×13",
+          "thick": "0.8",
+          "ballHt": "0.15±0.05",
+          "sample": "2025-01",
+          "cs": "2025-02",
+          "eol": "",
+          "fusa": "",
+          "gradeX": ""
+        },
+        {
+          "manufacturer": "Samsung",
+          "protocol": "UFS 4.1",
+          "controller": "",
+          "nandGen": "",
+          "density": "512G",
+          "dies": "1Tb x4",
+          "lw": "9×13",
+          "thick": "0.8",
+          "ballHt": "0.15±0.05",
+          "sample": "2025-01",
+          "cs": "2025-02",
+          "eol": "",
+          "fusa": "",
+          "gradeX": ""
+        },
+        {
+          "manufacturer": "Samsung",
+          "protocol": "UFS 4.1",
+          "controller": "",
+          "nandGen": "",
+          "density": "1T",
+          "dies": "1Tb x8",
+          "lw": "9×13",
+          "thick": "0.85",
+          "ballHt": "0.15±0.05",
+          "sample": "2025-01",
+          "cs": "2025-02",
+          "eol": "",
+          "fusa": "",
+          "gradeX": ""
+        }
+      ]
+    }
+  ],
+  "showFusa": false
+}
