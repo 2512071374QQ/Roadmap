@@ -8,7 +8,7 @@
           "protocol": "DDR5",
           "pkgType": "DSC",
           "ballNum": "646ball",
-          "chNum": "2",
+          "chNum": "4",
           "dataRate": "6400",
           "density": "8G",
           "dies": "8Gb x1",
