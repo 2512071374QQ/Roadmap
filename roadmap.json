@@ -68,7 +68,7 @@
           "gradeX": ""
         },
         {
-          "manufacturer": "",
+          "manufacturer": "Hynix",
           "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "V8",
