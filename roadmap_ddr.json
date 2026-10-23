@@ -395,7 +395,7 @@
           "gradeX": "3"
         },
         {
-          "manufacturer": "",
+          "manufacturer": "CXMT",
           "protocol": "LPDDR6",
           "controller": "",
           "nandGen": "",
