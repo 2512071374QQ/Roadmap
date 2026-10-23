@@ -167,7 +167,24 @@
     },
     {
       "name": "Table 2-Co UFS Roadmap 26Q4",
-      "rows": []
+      "rows": [
+        {
+          "manufacturer": "",
+          "protocol": "",
+          "controller": "",
+          "nandGen": "",
+          "density": "",
+          "dies": "",
+          "lw": "",
+          "thick": "",
+          "ballHt": "",
+          "sample": "",
+          "cs": "",
+          "eol": "",
+          "fusa": "",
+          "gradeX": ""
+        }
+      ]
     }
   ],
   "showFusa": false
