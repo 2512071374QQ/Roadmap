@@ -87,7 +87,7 @@
           "manufacturer": "Micron",
           "protocol": "UFS 3.1",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "FS19S/4/5/6",
           "density": "64G/128G/256G/512G",
           "dies": "",
           "lw": "",
