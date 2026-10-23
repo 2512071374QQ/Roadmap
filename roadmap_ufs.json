@@ -189,7 +189,7 @@
           "protocol": "UFS",
           "controller": "Solana",
           "nandGen": "V10",
-          "density": "",
+          "density": "2TB",
           "dies": "",
           "lw": "",
           "thick": "",
