@@ -117,7 +117,7 @@
         },
         {
           "manufacturer": "hynix",
-          "protocol": "",
+          "protocol": "UFS 3.1",
           "controller": "",
           "nandGen": "",
           "density": "",
