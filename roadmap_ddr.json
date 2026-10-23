@@ -330,7 +330,7 @@
           "protocol": "LPDDR6",
           "controller": "",
           "nandGen": "",
-          "density": "",
+          "density": "4GB",
           "dies": "",
           "lw": "",
           "thick": "",
