@@ -23,7 +23,7 @@
           "manufacturer": "Micron",
           "protocol": "UFS 4.1",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "FS17N ",
           "density": "",
           "dies": "",
           "lw": "",
