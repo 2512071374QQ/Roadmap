@@ -298,7 +298,7 @@
         },
         {
           "manufacturer": "YMTC",
-          "protocol": "",
+          "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "",
           "density": "",
@@ -345,7 +345,7 @@
           "gradeX": ""
         },
         {
-          "manufacturer": "",
+          "manufacturer": "YMTC",
           "protocol": "",
           "controller": "",
           "nandGen": "",
