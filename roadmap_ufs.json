@@ -6,7 +6,7 @@
         {
           "manufacturer": "Samsung",
           "protocol": "UFS 4.1",
-          "controller": "Savona",
+          "controller": "",
           "nandGen": "V9",
           "density": "256G",
           "dies": "512Gb x4",
