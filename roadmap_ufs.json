@@ -186,7 +186,7 @@
         },
         {
           "manufacturer": "Samsung",
-          "protocol": "UFS",
+          "protocol": "UFS 5.0",
           "controller": "Solana",
           "nandGen": "V10",
           "density": "2TB",
