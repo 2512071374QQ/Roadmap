@@ -513,7 +513,7 @@
           "manufacturer": "CXMT",
           "protocol": "LPDDR6",
           "controller": "4",
-          "nandGen": "",
+          "nandGen": "G5",
           "density": "16GB",
           "dies": "32Gb",
           "lw": "",
