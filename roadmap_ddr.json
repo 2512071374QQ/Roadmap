@@ -328,7 +328,7 @@
         {
           "manufacturer": "Micron",
           "protocol": "LPDDR6",
-          "controller": "",
+          "controller": "2",
           "nandGen": "",
           "density": "4GB",
           "dies": "16Gb T62M",
