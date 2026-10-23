@@ -234,9 +234,9 @@
         },
         {
           "manufacturer": "YMTC",
-          "protocol": "",
+          "protocol": "UFS 5.0",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "X5-90X0",
           "density": "",
           "dies": "",
           "lw": "",
