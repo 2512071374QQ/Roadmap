@@ -114,7 +114,7 @@
           "dataRate": "14.4Gbps",
           "dieWidth": "x24",
           "rankNum": "1",
-          "rankDensity": "",
+          "rankDensity": "32Gb*4",
           "fusa": "",
           "gradeX": "2"
         },
