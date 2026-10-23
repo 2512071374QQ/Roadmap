@@ -119,7 +119,7 @@
           "manufacturer": "hynix",
           "protocol": "UFS 3.1",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "V7",
           "density": "",
           "dies": "",
           "lw": "",
