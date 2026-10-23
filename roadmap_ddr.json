@@ -531,6 +531,29 @@
           "rankDensity": "",
           "fusa": "",
           "gradeX": ""
+        },
+        {
+          "manufacturer": "",
+          "protocol": "",
+          "controller": "",
+          "nandGen": "",
+          "density": "",
+          "dies": "",
+          "lw": "",
+          "thick": "",
+          "ballHt": "",
+          "sample": "",
+          "cs": "",
+          "eol": "",
+          "pkgType": "",
+          "ballNum": "",
+          "chNum": "",
+          "dataRate": "",
+          "dieWidth": "",
+          "rankNum": "",
+          "rankDensity": "",
+          "fusa": "",
+          "gradeX": ""
         }
       ]
     }
