@@ -217,7 +217,7 @@
           "nandGen": "1c",
           "density": "6GB/12GB/24GB",
           "dies": "24Gb",
-          "lw": "",
+          "lw": "8x14",
           "thick": "",
           "ballHt": "",
           "sample": "",
