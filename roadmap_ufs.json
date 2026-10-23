@@ -304,7 +304,7 @@
           "density": "256G/512G/1TB",
           "dies": "",
           "lw": "9x13",
-          "thick": "",
+          "thick": "0.85",
           "ballHt": "",
           "sample": "",
           "cs": "",
