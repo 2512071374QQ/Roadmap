@@ -84,8 +84,8 @@
           "gradeX": "2/3"
         },
         {
-          "manufacturer": "",
-          "protocol": "",
+          "manufacturer": "Micron",
+          "protocol": "UFS 3.1",
           "controller": "",
           "nandGen": "",
           "density": "",
