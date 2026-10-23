@@ -649,7 +649,7 @@
         },
         {
           "manufacturer": "",
-          "protocol": "",
+          "protocol": "LPDDR6",
           "controller": "",
           "nandGen": "",
           "density": "",
