@@ -250,7 +250,7 @@
         },
         {
           "manufacturer": "Samsung",
-          "protocol": "",
+          "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "",
           "density": "",
