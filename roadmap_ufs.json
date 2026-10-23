@@ -380,7 +380,7 @@
           "manufacturer": "KIOXIA",
           "protocol": "UFS 4.1",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "gen.14Q",
           "density": "",
           "dies": "",
           "lw": "",
