@@ -165,8 +165,8 @@
           "gradeX": ""
         },
         {
-          "manufacturer": "",
-          "protocol": "",
+          "manufacturer": "LPDDR6",
+          "protocol": "LPDDR6",
           "controller": "",
           "nandGen": "",
           "density": "",
