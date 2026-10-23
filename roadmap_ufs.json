@@ -171,7 +171,7 @@
         {
           "manufacturer": "Samsung",
           "protocol": "UFS 5.0",
-          "controller": "",
+          "controller": "Savona",
           "nandGen": "",
           "density": "",
           "dies": "",
