@@ -120,7 +120,7 @@
           "protocol": "UFS 3.1",
           "controller": "",
           "nandGen": "V7",
-          "density": "",
+          "density": "64G/128G/256G/512G",
           "dies": "",
           "lw": "",
           "thick": "",
