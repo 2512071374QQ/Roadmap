@@ -435,7 +435,7 @@
           "chNum": "2",
           "dataRate": "12.8Gbps",
           "dieWidth": "x24",
-          "rankNum": "",
+          "rankNum": "1",
           "rankDensity": "",
           "fusa": "",
           "gradeX": ""
@@ -457,7 +457,7 @@
           "ballNum": "357ball",
           "chNum": "2",
           "dataRate": "12.8Gbps",
-          "dieWidth": "1",
+          "dieWidth": "x12",
           "rankNum": "",
           "rankDensity": "",
           "fusa": "",
