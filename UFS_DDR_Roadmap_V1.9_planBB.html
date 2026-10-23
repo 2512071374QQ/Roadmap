@@ -921,14 +921,14 @@
   const THEME_KEY = 'ufs_roadmap_theme';
   const LOG_MAX = 50;
 
-  // ── GitHub Config (PlanBB: Token 内嵌免输入) ──
+  // ── GitHub Config ──
   const GH_OWNER = '2512071374QQ';
   const GH_REPO  = 'Roadmap';
   const GH_BASE  = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/';
+  // UFS 与 DDR 独立存储，互不干扰
   const GH_API_UFS = GH_BASE + 'roadmap_ufs.json';
   const GH_API_DDR = GH_BASE + 'roadmap_ddr.json';
-  // Token assembled from char codes to avoid secret scanning
-  const GH_TOKEN = String.fromCharCode(103,104,112,95,111,90,102,72,111,74,66,85,109,75,57,114,86,103,111,81,114,83,120,54,84,103,103,79,52,54,78,116,67,57,50,99,56,97,52,99);
+  let GH_TOKEN = sessionStorage.getItem('gh_token') || '';
   let ghShaUfs = null;
   let ghShaDdr = null;
 
@@ -941,7 +941,7 @@
   }
 
   function ensureToken() {
-    return true; // PlanBB: Token 已内嵌，始终可用
+    return !!GH_TOKEN;
   }
 
   // ── UFS Default Data ──
@@ -1245,14 +1245,12 @@
     setTimeout(() => toast.classList.remove('show'), 2000);
   }
 
-  // ── Login ──
-  // ── User Accounts & Permissions ──
+  // ── Login（Token 即密码，登录免 Token，登录后用 Token 读写）──
   const USERS = {
-    'Normal User':    { password: '123456', modes: ['view'] },
-    'Administrator':  { password: '12345',  modes: ['view', 'entry'] }
+    'Normal User':   { modes: ['view'] },
+    'Administrator': { modes: ['view', 'entry'] }
   };
 
-  // User switch: restrict mode options based on permissions
   loginUser.addEventListener('change', () => {
     const account = USERS[loginUser.value];
     const entryOpt = loginMode.querySelector('option[value="entry"]');
@@ -1266,22 +1264,55 @@
     }
   });
 
-  function doLogin() {
+  // 验证 Token 是否有效（调用 GitHub API 测试）
+  async function validateToken(token) {
+    try {
+      const res = await fetch('https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO, {
+        headers: {
+          'Authorization': 'token ' + token,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  async function doLogin() {
     const user = loginUser.value.trim();
-    const pass = loginPass.value;
+    const token = loginPass.value.trim();
     const account = USERS[user];
     if (!account) { showToast('❌ Unknown user'); return; }
-    if (pass !== account.password) {
-      showToast('❌ Wrong password');
+    if (!token) { loginPass.focus(); return; }
+
+    showToast('验证 Token 中...');
+    const valid = await validateToken(token);
+    if (!valid) {
+      showToast('❌ Token 无效，请输入正确的 GitHub Token');
       loginPass.value = '';
       loginPass.focus();
       return;
     }
+
+    // Token 有效，设置为 API 凭证
+    GH_TOKEN = token;
+    sessionStorage.setItem('gh_token', token);
+
     const mode = loginMode.value;
     if (!account.modes.includes(mode)) {
       showToast('❌ No permission for ' + mode + ' mode');
       return;
     }
+
+    // 加载数据（使用刚验证的 Token）
+    await loadData();
+    await loadDdrData();
+    loadLogs();
+    refreshSelectors();
+    toggleFusaColumn();
+    toggleUfsFusaColumn();
+
     currentUser = user;
     userInfo.textContent = user;
     loginOverlay.classList.add('hidden');
@@ -2610,17 +2641,11 @@
     });
   }
 
-  // ── Init ──
+  // ── Init（登录界面免 Token，数据在登录后加载）──
   loadTheme();
   loginUser.dispatchEvent(new Event('change'));
   loginPass.value = '';
-  Promise.all([loadData(), loadDdrData()]).then(() => {
-    loadLogs();
-    refreshSelectors();
-    toggleFusaColumn();
-    toggleUfsFusaColumn();
-    loginPass.focus();
-  });
+  loginPass.focus();
 })();
 </script>
 </body>
