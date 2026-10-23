@@ -172,7 +172,7 @@
           "manufacturer": "Samsung",
           "protocol": "UFS 5.0",
           "controller": "Savona",
-          "nandGen": "",
+          "nandGen": "V8",
           "density": "",
           "dies": "",
           "lw": "",
