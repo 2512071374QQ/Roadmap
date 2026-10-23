@@ -303,7 +303,7 @@
           "nandGen": "X4-9070",
           "density": "256G/512G/1TB",
           "dies": "",
-          "lw": "",
+          "lw": "9x13",
           "thick": "",
           "ballHt": "",
           "sample": "",
