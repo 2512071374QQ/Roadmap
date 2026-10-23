@@ -23,7 +23,7 @@
           "manufacturer": "Samsung",
           "protocol": "UFS 3.1",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "V8",
           "density": "",
           "dies": "",
           "lw": "",
