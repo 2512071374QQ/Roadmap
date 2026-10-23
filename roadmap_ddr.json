@@ -98,7 +98,7 @@
         {
           "manufacturer": "CXMT",
           "protocol": "LPDDR6",
-          "controller": "",
+          "controller": "4",
           "nandGen": "G5",
           "density": "16GB",
           "dies": "32Gb",
