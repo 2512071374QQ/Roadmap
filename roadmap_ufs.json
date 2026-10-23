@@ -104,7 +104,7 @@
           "protocol": "UFS 3.1",
           "controller": "Cygnus Auto",
           "nandGen": "FS301/2/3",
-          "density": "",
+          "density": "128G/256G/512G",
           "dies": "",
           "lw": "",
           "thick": "",
