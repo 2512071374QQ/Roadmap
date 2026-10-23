@@ -400,7 +400,7 @@
           "density": "256G/512G",
           "dies": "",
           "lw": "9x13",
-          "thick": "",
+          "thick": "0.8",
           "ballHt": "",
           "sample": "",
           "cs": "",
