@@ -277,7 +277,7 @@
           "rankNum": "1",
           "rankDensity": "32Gb*2",
           "fusa": "ASIL-D",
-          "gradeX": ""
+          "gradeX": "3"
         },
         {
           "manufacturer": "Micron",
@@ -300,7 +300,7 @@
           "rankNum": "1",
           "rankDensity": "32Gb*4",
           "fusa": "ASIL-D",
-          "gradeX": ""
+          "gradeX": "3"
         },
         {
           "manufacturer": "Micron",
@@ -323,7 +323,7 @@
           "rankNum": "2",
           "rankDensity": "32Gb*4+32Gb*4",
           "fusa": "ASIL-D",
-          "gradeX": ""
+          "gradeX": "3"
         },
         {
           "manufacturer": "Micron",
@@ -346,7 +346,7 @@
           "rankNum": "1",
           "rankDensity": "16Gb*2",
           "fusa": "ASIL-D",
-          "gradeX": ""
+          "gradeX": "3"
         },
         {
           "manufacturer": "Micron",
@@ -369,7 +369,7 @@
           "rankNum": "1",
           "rankDensity": "16Gb*4",
           "fusa": "ASIL-D",
-          "gradeX": ""
+          "gradeX": "3"
         },
         {
           "manufacturer": "Micron",
@@ -392,7 +392,7 @@
           "rankNum": "2",
           "rankDensity": "16Gb*4+16Gb*4",
           "fusa": "ASIL-D",
-          "gradeX": ""
+          "gradeX": "3"
         },
         {
           "manufacturer": "",
