@@ -186,7 +186,7 @@
         },
         {
           "manufacturer": "Samsung",
-          "protocol": "",
+          "protocol": "UFS",
           "controller": "",
           "nandGen": "",
           "density": "",
