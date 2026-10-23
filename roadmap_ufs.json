@@ -103,7 +103,7 @@
           "manufacturer": "Micron",
           "protocol": "UFS 3.1",
           "controller": "Cygnus Auto",
-          "nandGen": "",
+          "nandGen": "FS301/2/3",
           "density": "",
           "dies": "",
           "lw": "",
