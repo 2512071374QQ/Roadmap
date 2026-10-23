@@ -399,7 +399,7 @@
           "nandGen": "gen.C",
           "density": "256G/512G",
           "dies": "",
-          "lw": "",
+          "lw": "9x13",
           "thick": "",
           "ballHt": "",
           "sample": "",
