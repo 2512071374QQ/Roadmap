@@ -102,7 +102,7 @@
         {
           "manufacturer": "Micron",
           "protocol": "UFS 3.1",
-          "controller": "",
+          "controller": "Cygnus Auto",
           "nandGen": "",
           "density": "",
           "dies": "",
