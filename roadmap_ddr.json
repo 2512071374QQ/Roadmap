@@ -353,7 +353,7 @@
           "protocol": "LPDDR6",
           "controller": "",
           "nandGen": "",
-          "density": "",
+          "density": "8GB",
           "dies": "",
           "lw": "",
           "thick": "",
