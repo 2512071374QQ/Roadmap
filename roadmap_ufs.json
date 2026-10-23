@@ -377,10 +377,10 @@
           "gradeX": ""
         },
         {
-          "manufacturer": "YMTC",
-          "protocol": "UFS 4.1",
+          "manufacturer": "",
+          "protocol": "",
           "controller": "",
-          "nandGen": "X5-9070",
+          "nandGen": "",
           "density": "",
           "dies": "",
           "lw": "",
