@@ -187,59 +187,6 @@
       ]
     },
     {
-      "name": "Table 3",
-      "rows": [
-        {
-          "manufacturer": "",
-          "protocol": "",
-          "controller": "",
-          "nandGen": "",
-          "density": "",
-          "dies": "",
-          "lw": "",
-          "thick": "",
-          "ballHt": "",
-          "sample": "",
-          "cs": "",
-          "eol": "",
-          "fusa": "",
-          "gradeX": ""
-        },
-        {
-          "manufacturer": "",
-          "protocol": "",
-          "controller": "",
-          "nandGen": "",
-          "density": "",
-          "dies": "",
-          "lw": "",
-          "thick": "",
-          "ballHt": "",
-          "sample": "",
-          "cs": "",
-          "eol": "",
-          "fusa": "",
-          "gradeX": ""
-        },
-        {
-          "manufacturer": "",
-          "protocol": "",
-          "controller": "",
-          "nandGen": "",
-          "density": "",
-          "dies": "",
-          "lw": "",
-          "thick": "",
-          "ballHt": "",
-          "sample": "",
-          "cs": "",
-          "eol": "",
-          "fusa": "",
-          "gradeX": ""
-        }
-      ]
-    },
-    {
       "name": "Table 4",
       "rows": []
     },
