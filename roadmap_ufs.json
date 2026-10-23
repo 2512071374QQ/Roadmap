@@ -333,7 +333,7 @@
           "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "X4-9070",
-          "density": "",
+          "density": "256G",
           "dies": "",
           "lw": "",
           "thick": "",
