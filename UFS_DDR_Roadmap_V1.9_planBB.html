@@ -1245,14 +1245,15 @@
     setTimeout(() => toast.classList.remove('show'), 2000);
   }
 
-  // ── Login（Token 即密码，登录免 Token，登录后用 Token 读写）──
-  const USERS = {
-    'Normal User':   { modes: ['view'] },
-    'Administrator': { modes: ['view', 'entry'] }
+  // ── Login（AES-GCM 加密 Token，短密码解密登录）──
+  // 密文由 Python 预计算生成，浏览器用 Web Crypto API 解密
+  const ENC_DATA = {
+    'Normal User':   { salt: '/dvnenQQadSCwfuBo4yizQ==', iv: 'v2l6KD1jIDX6kw2+g', ct: 'EPDQ/XVDISGYdjyObD0kgigIfPmc4DfQa5Zoe/cv79fyeDehjvkzKX1yQk9uZJl1mZtqZodbt8s=', modes: ['view'] },
+    'Administrator': { salt: 'us6NzJartAS9+6tNqjO7IA==', iv: 'gqfeI3y8Iks6ploM', ct: 'QKnW37zx+vYpI09KE15LXgCLPJUiDt6sNMIH7i4n1t1xktpThf69wbg2rbRNkLBg5KSkG6BPIZc=', modes: ['view', 'entry'] }
   };
 
   loginUser.addEventListener('change', () => {
-    const account = USERS[loginUser.value];
+    const account = ENC_DATA[loginUser.value];
     const entryOpt = loginMode.querySelector('option[value="entry"]');
     if (account && !account.modes.includes('entry')) {
       entryOpt.disabled = true;
@@ -1263,6 +1264,27 @@
       entryOpt.textContent = 'Data Entry — Edit tables & logs';
     }
   });
+
+  // AES-GCM 解密 Token（Web Crypto API）
+  async function decryptToken(password, saltB64, ivB64, ctB64) {
+    const salt = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+    const iv = Uint8Array.from(atob(ivB64), c => c.charCodeAt(0));
+    const ct = Uint8Array.from(atob(ctB64), c => c.charCodeAt(0));
+
+    // PBKDF2 派生密钥
+    const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
+      keyMaterial,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['decrypt']
+    );
+
+    // AES-GCM 解密
+    const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, ct);
+    return new TextDecoder().decode(decrypted);
+  }
 
   // 验证 Token 是否有效（调用 GitHub API 测试）
   async function validateToken(token) {
@@ -1281,55 +1303,65 @@
 
   async function doLogin() {
     const user = loginUser.value.trim();
-    const token = loginPass.value.trim();
-    const account = USERS[user];
+    const password = loginPass.value;
+    const account = ENC_DATA[user];
     if (!account) { showToast('❌ Unknown user'); return; }
-    if (!token) { loginPass.focus(); return; }
+    if (!password) { loginPass.focus(); return; }
 
-    showToast('验证 Token 中...');
-    const valid = await validateToken(token);
-    if (!valid) {
-      showToast('❌ Token 无效，请输入正确的 GitHub Token');
+    showToast('验证中...');
+    try {
+      // 用密码解密 Token
+      const token = await decryptToken(password, account.salt, account.iv, account.ct);
+
+      // 验证 Token 有效性
+      const valid = await validateToken(token);
+      if (!valid) {
+        showToast('❌ 密码错误或 Token 无效');
+        loginPass.value = '';
+        loginPass.focus();
+        return;
+      }
+
+      // Token 有效，设置为 API 凭证
+      GH_TOKEN = token;
+      sessionStorage.setItem('gh_token', token);
+
+      const mode = loginMode.value;
+      if (!account.modes.includes(mode)) {
+        showToast('❌ No permission for ' + mode + ' mode');
+        return;
+      }
+
+      // 加载数据
+      await loadData();
+      await loadDdrData();
+      loadLogs();
+      refreshSelectors();
+      toggleFusaColumn();
+      toggleUfsFusaColumn();
+
+      currentUser = user;
+      userInfo.textContent = user;
+      loginOverlay.classList.add('hidden');
+      app.classList.add('visible');
+      currentMode = mode;
+
+      if (mode === 'entry') {
+        addLogEntry(user);
+        modeBadge.textContent = 'ENTRY MODE';
+        modeBadge.className = 'mode-badge entry-mode';
+        entryTabBar.classList.add('visible');
+        switchEntryTab('data');
+      } else {
+        modeBadge.textContent = 'VIEW MODE';
+        modeBadge.className = 'mode-badge view-mode';
+        entryTabBar.classList.remove('visible');
+        showPanel('view');
+      }
+    } catch (e) {
+      showToast('❌ 密码错误');
       loginPass.value = '';
       loginPass.focus();
-      return;
-    }
-
-    // Token 有效，设置为 API 凭证
-    GH_TOKEN = token;
-    sessionStorage.setItem('gh_token', token);
-
-    const mode = loginMode.value;
-    if (!account.modes.includes(mode)) {
-      showToast('❌ No permission for ' + mode + ' mode');
-      return;
-    }
-
-    // 加载数据（使用刚验证的 Token）
-    await loadData();
-    await loadDdrData();
-    loadLogs();
-    refreshSelectors();
-    toggleFusaColumn();
-    toggleUfsFusaColumn();
-
-    currentUser = user;
-    userInfo.textContent = user;
-    loginOverlay.classList.add('hidden');
-    app.classList.add('visible');
-    currentMode = mode;
-
-    if (mode === 'entry') {
-      addLogEntry(user);
-      modeBadge.textContent = 'ENTRY MODE';
-      modeBadge.className = 'mode-badge entry-mode';
-      entryTabBar.classList.add('visible');
-      switchEntryTab('data');
-    } else {
-      modeBadge.textContent = 'VIEW MODE';
-      modeBadge.className = 'mode-badge view-mode';
-      entryTabBar.classList.remove('visible');
-      showPanel('view');
     }
   }
 
