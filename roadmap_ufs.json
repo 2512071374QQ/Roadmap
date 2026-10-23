@@ -22,7 +22,7 @@
         {
           "manufacturer": "Micron",
           "protocol": "UFS 4.1",
-          "controller": "",
+          "controller": "Carina Auto",
           "nandGen": "FS17N ",
           "density": "128G/256G/512G/1TB",
           "dies": "",
