@@ -56,7 +56,7 @@
           "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "BICS",
-          "density": "",
+          "density": "128G/256G/512G/1TB",
           "dies": "",
           "lw": "",
           "thick": "",
