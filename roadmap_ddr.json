@@ -621,8 +621,8 @@
           "dieWidth": "x24",
           "rankNum": "1",
           "rankDensity": "32Gb*2",
-          "fusa": "",
-          "gradeX": ""
+          "fusa": "ASIL-D",
+          "gradeX": "3"
         },
         {
           "manufacturer": "Micron",
@@ -644,8 +644,8 @@
           "dieWidth": "x12",
           "rankNum": "1",
           "rankDensity": "32Gb*4",
-          "fusa": "",
-          "gradeX": ""
+          "fusa": "ASIL-D",
+          "gradeX": "3"
         },
         {
           "manufacturer": "",
