@@ -132,8 +132,8 @@
           "gradeX": "2"
         },
         {
-          "manufacturer": "",
-          "protocol": "",
+          "manufacturer": "KIOXIA",
+          "protocol": "UFS 3.1",
           "controller": "",
           "nandGen": "",
           "density": "",
