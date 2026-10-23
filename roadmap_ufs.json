@@ -381,7 +381,7 @@
           "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "gen.14Q",
-          "density": "",
+          "density": "512G/1TB",
           "dies": "",
           "lw": "",
           "thick": "",
