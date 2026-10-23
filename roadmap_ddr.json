@@ -418,7 +418,7 @@
           "gradeX": ""
         },
         {
-          "manufacturer": "",
+          "manufacturer": "Micron",
           "protocol": "LPDDR6",
           "controller": "",
           "nandGen": "",
@@ -441,7 +441,7 @@
           "gradeX": ""
         },
         {
-          "manufacturer": "",
+          "manufacturer": "Micron",
           "protocol": "LPDDR6",
           "controller": "",
           "nandGen": "",
