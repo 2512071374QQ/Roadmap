@@ -170,7 +170,7 @@
       "rows": [
         {
           "manufacturer": "Samsung",
-          "protocol": "",
+          "protocol": "UFS 5.0",
           "controller": "",
           "nandGen": "",
           "density": "",
