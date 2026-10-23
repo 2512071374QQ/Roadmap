@@ -172,7 +172,7 @@
           "manufacturer": "Samsung",
           "protocol": "UFS 5.0",
           "controller": "Solana",
-          "nandGen": "V8",
+          "nandGen": "V9",
           "density": "512G/1TB",
           "dies": "",
           "lw": "7.5x13",
