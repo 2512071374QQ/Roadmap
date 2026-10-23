@@ -317,7 +317,7 @@
           "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "X5-9070",
-          "density": "",
+          "density": "512G/1TB",
           "dies": "",
           "lw": "",
           "thick": "",
