@@ -253,7 +253,7 @@
           "protocol": "UFS 5.0",
           "controller": "",
           "nandGen": "gen.15",
-          "density": "",
+          "density": "512G/1TB ",
           "dies": "",
           "lw": "",
           "thick": "",
