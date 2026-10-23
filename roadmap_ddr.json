@@ -274,7 +274,7 @@
           "chNum": "2",
           "dataRate": "12.8Gbps",
           "dieWidth": "x24",
-          "rankNum": "",
+          "rankNum": "1",
           "rankDensity": "",
           "fusa": "",
           "gradeX": ""
@@ -297,7 +297,7 @@
           "chNum": "2",
           "dataRate": "12.8Gbps",
           "dieWidth": "x12",
-          "rankNum": "",
+          "rankNum": "1",
           "rankDensity": "",
           "fusa": "",
           "gradeX": ""
@@ -320,7 +320,7 @@
           "chNum": "2",
           "dataRate": "12.8Gbps",
           "dieWidth": "x12",
-          "rankNum": "",
+          "rankNum": "2",
           "rankDensity": "",
           "fusa": "",
           "gradeX": ""
@@ -343,7 +343,7 @@
           "chNum": "2",
           "dataRate": "11.7Gbps",
           "dieWidth": "x24",
-          "rankNum": "",
+          "rankNum": "1",
           "rankDensity": "",
           "fusa": "",
           "gradeX": ""
@@ -366,7 +366,7 @@
           "chNum": "2",
           "dataRate": "11.7Gbps",
           "dieWidth": "x12",
-          "rankNum": "",
+          "rankNum": "1",
           "rankDensity": "",
           "fusa": "",
           "gradeX": ""
@@ -389,7 +389,7 @@
           "chNum": "2",
           "dataRate": "11.7Gbps",
           "dieWidth": "x12",
-          "rankNum": "",
+          "rankNum": "2",
           "rankDensity": "",
           "fusa": "",
           "gradeX": ""
