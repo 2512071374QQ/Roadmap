@@ -8,7 +8,7 @@
           "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "V8",
-          "density": "256G",
+          "density": "128G/256G/512G/1TB",
           "dies": "512Gb x4",
           "lw": "9x13",
           "thick": "0.8",
