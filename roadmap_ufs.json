@@ -36,8 +36,8 @@
           "gradeX": "2&3"
         },
         {
-          "manufacturer": "",
-          "protocol": "",
+          "manufacturer": "Hynix",
+          "protocol": "UFS 4.1",
           "controller": "",
           "nandGen": "",
           "density": "",
