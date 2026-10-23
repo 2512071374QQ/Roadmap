@@ -390,7 +390,7 @@
           "dataRate": "11.7Gbps",
           "dieWidth": "x12",
           "rankNum": "2",
-          "rankDensity": "",
+          "rankDensity": "16Gb*4+16Gb*4",
           "fusa": "",
           "gradeX": ""
         },
