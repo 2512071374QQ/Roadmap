@@ -215,7 +215,7 @@
           "protocol": "LPDDR6",
           "controller": "",
           "nandGen": "",
-          "density": "",
+          "density": "6GB/12GB/24GB",
           "dies": "",
           "lw": "",
           "thick": "",
