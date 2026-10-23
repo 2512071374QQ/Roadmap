@@ -252,7 +252,7 @@
           "manufacturer": "KIOXIA",
           "protocol": "UFS 5.0",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "gen.15",
           "density": "",
           "dies": "",
           "lw": "",
