@@ -188,7 +188,7 @@
           "manufacturer": "Samsung",
           "protocol": "UFS",
           "controller": "Solana",
-          "nandGen": "",
+          "nandGen": "V10",
           "density": "",
           "dies": "",
           "lw": "",
