@@ -265,6 +265,22 @@
           "gradeX": ""
         },
         {
+          "manufacturer": "",
+          "protocol": "",
+          "controller": "",
+          "nandGen": "",
+          "density": "",
+          "dies": "",
+          "lw": "",
+          "thick": "",
+          "ballHt": "",
+          "sample": "",
+          "cs": "",
+          "eol": "",
+          "fusa": "",
+          "gradeX": ""
+        },
+        {
           "manufacturer": "Samsung",
           "protocol": "UFS 4.1",
           "controller": "Savona",
