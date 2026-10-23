@@ -516,7 +516,7 @@
           "nandGen": "G5",
           "density": "16GB",
           "dies": "32Gb",
-          "lw": "",
+          "lw": "15.5*15.5",
           "thick": "",
           "ballHt": "",
           "sample": "",
