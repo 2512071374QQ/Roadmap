@@ -443,7 +443,7 @@
         {
           "manufacturer": "Micron",
           "protocol": "LPDDR6",
-          "controller": "",
+          "controller": "8",
           "nandGen": "",
           "density": "32GB",
           "dies": "32Gb T63M",
