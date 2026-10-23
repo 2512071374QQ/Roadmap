@@ -55,7 +55,7 @@
           "manufacturer": "KIOXIA",
           "protocol": "UFS 4.1",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "BICS",
           "density": "",
           "dies": "",
           "lw": "",
