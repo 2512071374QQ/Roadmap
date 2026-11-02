@@ -316,7 +316,7 @@
           "manufacturer": "Hynix",
           "protocol": "UFS 4.1",
           "controller": "Viking",
-          "nandGen": "V10",
+          "nandGen": "V8",
           "density": "256G/512G/1TB",
           "dies": "",
           "lw": "",
