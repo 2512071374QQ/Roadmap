@@ -301,7 +301,7 @@
           "protocol": "UFS 4.1",
           "controller": "Viking",
           "nandGen": "V9",
-          "density": "",
+          "density": "512G/1TB",
           "dies": "",
           "lw": "",
           "thick": "",
