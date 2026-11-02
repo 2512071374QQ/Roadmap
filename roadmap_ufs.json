@@ -299,7 +299,7 @@
         {
           "manufacturer": "Hynix",
           "protocol": "UFS 4.1",
-          "controller": "",
+          "controller": "Viking",
           "nandGen": "",
           "density": "",
           "dies": "",
