@@ -203,7 +203,7 @@
         {
           "manufacturer": "Hynix",
           "protocol": "UFS 5.0",
-          "controller": "",
+          "controller": "Genova",
           "nandGen": "V9",
           "density": "512G/1TB",
           "dies": "",
