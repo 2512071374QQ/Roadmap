@@ -300,7 +300,7 @@
           "manufacturer": "Hynix",
           "protocol": "UFS 4.1",
           "controller": "Viking",
-          "nandGen": "",
+          "nandGen": "V9",
           "density": "",
           "dies": "",
           "lw": "",
