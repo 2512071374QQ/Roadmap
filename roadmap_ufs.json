@@ -204,7 +204,7 @@
           "manufacturer": "Hynix",
           "protocol": "UFS 5.0",
           "controller": "",
-          "nandGen": "",
+          "nandGen": "V9",
           "density": "512G/1TB",
           "dies": "",
           "lw": "",
